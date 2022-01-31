@@ -28,6 +28,6 @@ def place_on_grid(widget: tk.Widget,
 def set_weights(widget: tk.Widget, _x=(1,), _y=(1,)):
     """Sets the weights for a widget, usually a Frame or a LabelFrame goes here."""
     for idx, weight in enumerate(_x):
-        widget.rowconfigure(idx, weight=weight)
-    for idx, weight in enumerate(_y):
         widget.columnconfigure(idx, weight=weight)
+    for idx, weight in enumerate(_y):
+        widget.rowconfigure(idx, weight=weight)

@@ -21,7 +21,7 @@ class MainFrame(tk.Frame, ul.w_i.WidgetInherit):
         def __init__(self, parent: tk.Widget):
             super().__init__(parent, **ul.df.FRAME)
             ul.g_u.place_on_grid(self)
-            ul.g_u.set_weights(self, (1, 1))
+            ul.g_u.set_weights(self)
 
             self.w_hor_scrollbar = self.XScroll(self)
             self.w_vert_scrollbar = self.YScroll(self)
@@ -40,7 +40,6 @@ class MainFrame(tk.Frame, ul.w_i.WidgetInherit):
             def __init__(self, parent: tk.Widget):
                 super().__init__(parent)
                 ul.g_u.place_on_grid(self)
-                ul.g_u.set_weights(self, _x=(10, 1))
                 ul.f_u.set_font(self)
 
                 for i in range(100):
@@ -70,34 +69,38 @@ class MainFrame(tk.Frame, ul.w_i.WidgetInherit):
             self.w_edit = self.EditTask(self)
             self.w_remove = self.RemoveTask(self)
 
-        class AddTask(tk.Button, ul.w_i.WidgetInherit):
+        class TaskButton(tk.Button, ul.w_i.WidgetInherit):
+            """Base button class."""
+            def __init__(self, parent: tk.Widget, text: str, underline=False, coords=(0, 0)):
+                super().__init__(parent, text=text, command=self.click)
+                ul.g_u.place_on_grid(self, coords=coords)
+                ul.f_u.set_font(self, underline=underline)
+
+            def click(self):
+                """Click!"""
+
+        class AddTask(TaskButton):
             """Add a task."""
             def __init__(self, parent: tk.Widget):
-                super().__init__(parent, text="Add Task", command=self.click)
-                ul.g_u.place_on_grid(self)
-                ul.f_u.set_font(self, underline=True)
+                super().__init__(parent, text="Add Task", underline=True)
 
             def click(self):
                 """Click!"""
 
 
-        class EditTask(tk.Button, ul.w_i.WidgetInherit):
-            """Edit a task."""
+        class EditTask(TaskButton):
+            """Add a task."""
             def __init__(self, parent: tk.Widget):
-                super().__init__(parent, text="Edit Task", command=self.click)
-                ul.g_u.place_on_grid(self, coords=(0, 1))
-                ul.f_u.set_font(self)
+                super().__init__(parent, text="Edit Task", coords=(0, 1))
 
             def click(self):
                 """Click!"""
 
 
-        class RemoveTask(tk.Button, ul.w_i.WidgetInherit):
-            """Remove a task."""
+        class RemoveTask(TaskButton):
+            """Add a task."""
             def __init__(self, parent: tk.Widget):
-                super().__init__(parent, text="Remove Task", command=self.click)
-                ul.g_u.place_on_grid(self, coords=(0, 2))
-                ul.f_u.set_font(self)
+                super().__init__(parent, text="Remove Task", coords=(0, 2))
 
             def click(self):
                 """Click!"""
