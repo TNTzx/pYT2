@@ -7,6 +7,8 @@ import backend.display.utils.widget_inherit as w_i
 import backend.display.utils.grid_utils as g_u
 import backend.display.utils.font_utils as f_u
 
+import backend.display.widgets.tasks.task_manager.task_manager as t_m
+
 
 class Title(tk.Label, w_i.WidgetInherit):
     """Title."""
@@ -24,3 +26,4 @@ class MainFrame(tk.Frame, w_i.WidgetInherit):
         g_u.set_weights(self)
 
         self.title = Title(self)
+        self.manager = t_m.MainFrame(self)
