@@ -40,6 +40,7 @@ class MainFrame(tk.Frame, ul.w_i.WidgetInherit):
             def __init__(self, parent: tk.Widget):
                 super().__init__(parent)
                 ul.g_u.place_on_grid(self)
+                ul.g_u.set_weights(self, _x=(10, 1))
                 ul.f_u.set_font(self)
 
                 for i in range(100):
@@ -63,6 +64,7 @@ class MainFrame(tk.Frame, ul.w_i.WidgetInherit):
         def __init__(self, parent: tk.Widget):
             super().__init__(parent, **ul.df.FRAME)
             ul.g_u.place_on_grid(self, coords=(1, 0))
+            ul.g_u.set_weights(self, _y=(1, 1, 1))
 
             self.w_add = self.AddTask(self)
             self.w_edit = self.EditTask(self)
