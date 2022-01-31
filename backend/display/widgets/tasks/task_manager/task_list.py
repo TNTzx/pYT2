@@ -12,7 +12,8 @@ class MainFrame(tk.Frame, ul.w_i.WidgetInherit):
         ul.g_u.place_on_grid(self, coords=(0, 1))
         ul.g_u.set_weights(self)
 
-        self.w_task_list_control = self.List(self)
+        self.w_list = self.List(self)
+        self.w_controls = self.Controls(self)
 
 
     class List(tk.Frame):
@@ -55,26 +56,35 @@ class MainFrame(tk.Frame, ul.w_i.WidgetInherit):
             def __init__(self, parent: tk.Widget):
                 super().__init__(parent)
                 ul.g_u.place_on_grid(self, coords=(1, 0))
-    
+
 
     class Controls(tk.Frame, ul.w_i.WidgetInherit):
         """Controls for the lists."""
+        def __init__(self, parent: tk.Widget):
+            super().__init__(parent, **ul.df.FRAME)
+            ul.g_u.place_on_grid(self, coords=(1, 0))
+
+            self.w_add = self.AddTask(self)
+            self.w_edit = self.EditTask(self)
+            self.w_remove = self.RemoveTask(self)
 
         class AddTask(tk.Button, ul.w_i.WidgetInherit):
             """Add a task."""
             def __init__(self, parent: tk.Widget):
                 super().__init__(parent, text="Add Task")
                 ul.g_u.place_on_grid(self)
+                ul.f_u.set_font(self, underline=True)
 
         class EditTask(tk.Button, ul.w_i.WidgetInherit):
             """Edit a task."""
             def __init__(self, parent: tk.Widget):
                 super().__init__(parent, text="Edit Task")
-                ul.g_u.place_on_grid(self)
+                ul.g_u.place_on_grid(self, coords=(0, 1))
+                ul.f_u.set_font(self)
 
         class RemoveTask(tk.Button, ul.w_i.WidgetInherit):
             """Remove a task."""
             def __init__(self, parent: tk.Widget):
                 super().__init__(parent, text="Remove Task")
-                ul.g_u.place_on_grid(self)
-    
+                ul.g_u.place_on_grid(self, coords=(0, 2))
+                ul.f_u.set_font(self)
