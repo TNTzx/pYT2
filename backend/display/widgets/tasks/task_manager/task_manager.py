@@ -15,14 +15,16 @@ class TaskListControl(tk.Frame):
         g_u.place_on_grid(self)
         g_u.set_weights(self, (1, 1))
 
+        self.w_hor_scrollbar = self.TaskListXScroll(self)
+        self.w_vert_scrollbar = self.TaskListYScroll(self)
         self.w_list = self.TaskList(self)
-        self.w_scrollbar = self.TaskListScroll(self)
 
-    class TaskListScroll(tk.Scrollbar, w_i.WidgetInherit):
-        """Scrollbar."""
-        def __init__(self, parent: tk.Widget):
-            super().__init__(parent)
-            g_u.place_on_grid(self, coords=(1, 0))
+        self.w_hor_scrollbar.configure(command=self.w_list.xview)
+        self.w_vert_scrollbar.configure(command=self.w_list.yview)
+        self.w_list.configure(
+            xscrollcommand=self.w_hor_scrollbar,
+            yscrollcommand=self.w_vert_scrollbar.set
+        )
 
     class TaskList(tk.Listbox, w_i.WidgetInherit):
         """List of tasks."""
@@ -30,6 +32,21 @@ class TaskListControl(tk.Frame):
             super().__init__(parent)
             g_u.place_on_grid(self)
             f_u.set_font(self)
+
+            for i in range(100):
+                self.insert(tk.END, list(range(i, 100)))
+
+    class TaskListXScroll(tk.Scrollbar, w_i.WidgetInherit):
+        """Horizontal Scrollbar."""
+        def __init__(self, parent: tk.Widget):
+            super().__init__(parent, orient=tk.HORIZONTAL)
+            g_u.place_on_grid(self, coords=(0, 1))
+
+    class TaskListYScroll(tk.Scrollbar, w_i.WidgetInherit):
+        """Vertical Scrollbar."""
+        def __init__(self, parent: tk.Widget):
+            super().__init__(parent)
+            g_u.place_on_grid(self, coords=(1, 0))
 
 
 class MainFrame(tk.Frame, w_i.WidgetInherit):

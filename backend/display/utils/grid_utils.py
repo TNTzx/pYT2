@@ -14,10 +14,10 @@ def place_on_grid(widget: tk.Widget,
     ):
     """Places a widget on a grid."""
     widget.grid(
-        row = coords[0],
-        column = coords[1],
-        rowspan = span_set[0],
-        columnspan = span_set[1],
+        column = coords[0],
+        row = coords[1],
+        columnspan = span_set[0],
+        rowspan = span_set[1],
         ipadx = ipad_set[0],
         ipady = ipad_set[1],
         padx = pad_set[0],
