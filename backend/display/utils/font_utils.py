@@ -6,14 +6,14 @@ import tkinter.font as tkf
 import backend.display.utils.defaults as df
 
 def set_font(
-        widget: tk.Widget, family=df.FONT_FAMILY,
+        widget: tk.Widget, family=ul.df.FONT_FAMILY,
         size_mult=1, bold=False, italic=False, underline=False, overline=False
     ):
     """Sets the font of a widget."""
     widget.configure(
         font = tkf.Font(
             family = family,
-            size = df.FONT_SIZE_BASE * size_mult,
+            size = ul.df.FONT_SIZE_BASE * size_mult,
             weight = "bold" if bold else "normal",
             slant = "italic" if italic else "roman",
             underline = underline,

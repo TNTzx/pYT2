@@ -9,7 +9,7 @@ def place_on_grid(widget: tk.Widget,
         coords = (0, 0),
         span_set = (1, 1),
         ipad_set = (0, 0),
-        pad_set = df.PAD_SET,
+        pad_set = ul.df.PAD_SET,
         sticks = ("N", "S", "E", "W")
     ):
     """Places a widget on a grid."""
