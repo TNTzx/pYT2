@@ -3,7 +3,8 @@
 import tkinter as tk
 import tkinter.font as tkf
 
-import backend.display.utils.defaults as df
+import backend.display.utils as ul
+
 
 def set_font(
         widget: tk.Widget, family=ul.df.FONT_FAMILY,

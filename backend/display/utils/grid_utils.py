@@ -2,7 +2,7 @@
 
 import tkinter as tk
 
-import backend.display.utils.defaults as df
+import backend.display.utils as ul
 
 
 def place_on_grid(widget: tk.Widget,

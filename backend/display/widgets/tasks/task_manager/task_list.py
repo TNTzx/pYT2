@@ -71,20 +71,31 @@ class MainFrame(tk.Frame, ul.w_i.WidgetInherit):
         class AddTask(tk.Button, ul.w_i.WidgetInherit):
             """Add a task."""
             def __init__(self, parent: tk.Widget):
-                super().__init__(parent, text="Add Task")
+                super().__init__(parent, text="Add Task", command=self.click)
                 ul.g_u.place_on_grid(self)
                 ul.f_u.set_font(self, underline=True)
+
+            def click(self):
+                """Click!"""
+
 
         class EditTask(tk.Button, ul.w_i.WidgetInherit):
             """Edit a task."""
             def __init__(self, parent: tk.Widget):
-                super().__init__(parent, text="Edit Task")
+                super().__init__(parent, text="Edit Task", command=self.click)
                 ul.g_u.place_on_grid(self, coords=(0, 1))
                 ul.f_u.set_font(self)
+
+            def click(self):
+                """Click!"""
+
 
         class RemoveTask(tk.Button, ul.w_i.WidgetInherit):
             """Remove a task."""
             def __init__(self, parent: tk.Widget):
-                super().__init__(parent, text="Remove Task")
+                super().__init__(parent, text="Remove Task", command=self.click)
                 ul.g_u.place_on_grid(self, coords=(0, 2))
                 ul.f_u.set_font(self)
+
+            def click(self):
+                """Click!"""
