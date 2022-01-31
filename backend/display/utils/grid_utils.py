@@ -5,7 +5,13 @@ import tkinter as tk
 import backend.display.utils.defaults as df
 
 
-def place_on_grid(widget: tk.Widget, coords=(0, 0), span_set=(1, 1), ipad_set=(0, 0), pad_set=df.PAD_SET, sticks=("N", "S", "E", "W")):
+def place_on_grid(widget: tk.Widget,
+        coords = (0, 0),
+        span_set = (1, 1),
+        ipad_set = (0, 0),
+        pad_set = df.PAD_SET,
+        sticks = ("N", "S", "E", "W")
+    ):
     """Places a widget on a grid."""
     widget.grid(
         row = coords[0],
@@ -22,6 +28,6 @@ def place_on_grid(widget: tk.Widget, coords=(0, 0), span_set=(1, 1), ipad_set=(0
 def set_weights(widget: tk.Widget, _x=(1,), _y=(1,)):
     """Sets the weights for a widget, usually a Frame or a LabelFrame goes here."""
     for idx, weight in enumerate(_x):
-        widget.rowconfigure(idx, weight)
+        widget.rowconfigure(idx, weight=weight)
     for idx, weight in enumerate(_y):
-        widget.columnconfigure(idx, weight)
+        widget.columnconfigure(idx, weight=weight)
