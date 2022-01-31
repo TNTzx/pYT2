@@ -22,8 +22,8 @@ class MainFrame(tk.Frame, w_i.WidgetInherit):
     """Main frame for the tasks menu."""
     def __init__(self, parent: tk.Widget):
         super().__init__(parent, **df.FRAME)
-        g_u.place_on_grid(self)
+        g_u.place_on_grid(self, coords=(0, 1))
         g_u.set_weights(self)
 
-        self.title = Title(self)
-        self.manager = t_m.MainFrame(self)
+        self.w_title = Title(self)
+        self.w_manager = t_m.MainFrame(self)

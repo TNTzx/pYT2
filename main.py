@@ -14,7 +14,10 @@ class FrameMain(tk.Frame, w_i.WidgetInherit):
         super().__init__(parent, **df.FRAME)
         g_u.place_on_grid(self)
         g_u.set_weights(self)
+
         self.w_title = wg.title.MainFrame(self)
+        self.w_tasks = wg.tasks.tasks.MainFrame(self)
+
 
 
 if __name__ == "__main__":

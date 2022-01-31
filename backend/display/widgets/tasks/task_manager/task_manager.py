@@ -15,8 +15,8 @@ class TaskListControl(tk.Frame):
         g_u.place_on_grid(self)
         g_u.set_weights(self, (1, 1))
 
-        self.list = self.TaskList(self)
-        self.scrollbar = self.TaskListScroll(self)
+        self.w_list = self.TaskList(self)
+        self.w_scrollbar = self.TaskListScroll(self)
 
     class TaskListScroll(tk.Scrollbar, w_i.WidgetInherit):
         """Scrollbar."""
