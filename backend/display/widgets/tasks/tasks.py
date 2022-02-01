@@ -3,6 +3,7 @@
 import tkinter as tk
 
 import backend.display.utils as ul
+import backend.display.widgets.tasks.edit.edit as ed
 
 
 class TaskList(tk.Frame, ul.w_i.WidgetInherit):
@@ -85,7 +86,7 @@ class TaskList(tk.Frame, ul.w_i.WidgetInherit):
                 super().__init__(parent, text="Add Task", underline=True)
 
             def click(self):
-                """Click!"""
+                ed.MainWindow()
 
 
         class EditTask(TaskButton):
@@ -94,7 +95,7 @@ class TaskList(tk.Frame, ul.w_i.WidgetInherit):
                 super().__init__(parent, text="Edit Task", coords=(0, 1))
 
             def click(self):
-                """Click!"""
+                pass
 
 
         class RemoveTask(TaskButton):
@@ -103,7 +104,7 @@ class TaskList(tk.Frame, ul.w_i.WidgetInherit):
                 super().__init__(parent, text="Remove Task", coords=(0, 2))
 
             def click(self):
-                """Click!"""
+                pass
 
 
 class Title(tk.Label, ul.w_i.WidgetInherit):
