@@ -2,7 +2,7 @@
 
 import tkinter as tk
 
-import backend.display.utils as ul
+import layers.display.utils as ul
 
 
 class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):

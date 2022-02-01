@@ -2,8 +2,8 @@
 
 import tkinter as tk
 
-import backend.display.utils as ul
-import backend.display.widgets.tasks.edit.edit as ed
+import layers.display.utils as ul
+import layers.display.widgets.tasks.edit.edit as ed
 
 
 class TaskList(tk.Frame, ul.w_i.WidgetInherit):

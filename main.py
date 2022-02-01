@@ -2,8 +2,8 @@
 
 import tkinter as tk
 
-import backend.display.utils as ul
-import backend.display.widgets as wg
+import layers.display.utils as ul
+import layers.display.widgets as wg
 
 
 class FrameMain(tk.Frame, ul.w_i.WidgetInherit):
