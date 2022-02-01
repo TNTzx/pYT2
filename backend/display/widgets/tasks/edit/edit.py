@@ -9,6 +9,7 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
     """The main window."""
     def __init__(self):
         super().__init__()
+        ul.g_u.set_weights(self)
 
         self.w_frame = self.MainFrame(self)
 
@@ -20,14 +21,15 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
             ul.g_u.set_weights(self, _y=(1, 1, 1))
 
             self.w_url = self.URL(self)
-            self.w_stream = self.StreamSelect(self)
-            self.w_convert = self.Convert(self)
+            self.w_options = self.Options(self)
+            self.w_path = self.Path(self)
+
 
         class URL(tk.Frame, ul.w_i.WidgetInherit):
             """Contains widgets for inputting the URL."""
             def __init__(self, parent: tk.Widget):
                 super().__init__(parent, **ul.df.FRAME)
-                ul.g_u.place_on_grid(self, span_set=(2, 1))
+                ul.g_u.place_on_grid(self)
                 ul.g_u.set_weights(self, _x=(1, 3, 1))
 
                 self.w_title = self.Title(self)
@@ -55,50 +57,116 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
                     ul.g_u.place_on_grid(self, coords=(2, 0))
                     ul.f_u.set_font(self)
 
-        class StreamSelect(tk.Frame, ul.w_i.WidgetInherit):
-            """UI for selecting the stream."""
+        class Options(tk.Frame, ul.w_i.WidgetInherit):
+            """Contains options for the selected URL."""
             def __init__(self, parent: tk.Widget):
                 super().__init__(parent, **ul.df.FRAME)
                 ul.g_u.place_on_grid(self, coords=(0, 1))
-                ul.g_u.set_weights(self, _y=(1, 3))
+                ul.g_u.set_weights(self, _x=(4, 1))
+
+                self.w_stream = self.StreamSelect(self)
+                self.w_convert = self.Convert(self)
+
+            class StreamSelect(tk.Frame, ul.w_i.WidgetInherit):
+                """UI for selecting the stream."""
+                def __init__(self, parent: tk.Widget):
+                    super().__init__(parent, **ul.df.FRAME)
+                    ul.g_u.place_on_grid(self, coords=(0, 1))
+                    ul.g_u.set_weights(self, _y=(1, 3))
+
+                    self.w_title = self.Title(self)
+                    self.w_list = self.Listbox(self)
+
+                class Title(tk.Label, ul.w_i.WidgetInherit):
+                    """The title."""
+                    def __init__(self, parent: tk.Widget):
+                        super().__init__(parent, text="Select Stream")
+                        ul.g_u.place_on_grid(self)
+                        ul.f_u.set_font(self, size_mult=2, bold=True)
+
+                class Listbox(tk.Listbox, ul.w_i.WidgetInherit):
+                    """The list of streams."""
+                    def __init__(self, parent: tk.Widget):
+                        super().__init__(parent)
+                        ul.g_u.place_on_grid(self, coords=(0, 1))
+                        ul.f_u.set_font(self)
+
+            class Convert(tk.Frame, ul.w_i.WidgetInherit):
+                """UI for converting the stream into a format."""
+                def __init__(self, parent: tk.Widget):
+                    super().__init__(parent, **ul.df.FRAME)
+                    ul.g_u.place_on_grid(self, coords=(1, 1))
+                    ul.g_u.set_weights(self, _x=(1, 1))
+
+                    self.w_title = self.Title(self)
+                    self.w_list = self.List(self)
+
+                class Title(tk.Label, ul.w_i.WidgetInherit):
+                    """The title."""
+                    def __init__(self, parent: tk.Widget):
+                        super().__init__(parent, text="Convert to:")
+                        ul.g_u.place_on_grid(self)
+                        ul.f_u.set_font(self, bold=True)
+
+                class List(tk.Listbox, ul.w_i.WidgetInherit):
+                    """List of formats to convert to."""
+                    def __init__(self, parent: tk.Widget):
+                        super().__init__(parent)
+                        ul.g_u.place_on_grid(self, coords=(1, 0))
+                        ul.f_u.set_font(self)
+
+        class Path(tk.Frame, ul.w_i.WidgetInherit):
+            """UI to get the file path."""
+            def __init__(self, parent: tk.Widget):
+                super().__init__(parent, **ul.df.FRAME)
+                ul.g_u.place_on_grid(self, coords=(0, 2))
+                ul.g_u.set_weights(self, _x=(1, 3, 1))
 
                 self.w_title = self.Title(self)
-                self.w_list = self.Listbox(self)
+                self.w_input = self.Input(self)
+                self.w_set = self.Browse(self)
 
             class Title(tk.Label, ul.w_i.WidgetInherit):
                 """The title."""
                 def __init__(self, parent: tk.Widget):
-                    super().__init__(parent, text="Select Stream")
+                    super().__init__(parent, text="Output to:")
                     ul.g_u.place_on_grid(self)
                     ul.f_u.set_font(self, size_mult=2, bold=True)
 
-            class Listbox(tk.Listbox, ul.w_i.WidgetInherit):
-                """The list of streams."""
+            class Input(tk.Entry, ul.w_i.WidgetInherit):
+                """The input field."""
                 def __init__(self, parent: tk.Widget):
                     super().__init__(parent)
-                    ul.g_u.place_on_grid(self, coords=(0, 1))
+                    ul.g_u.place_on_grid(self, coords=(1, 0))
                     ul.f_u.set_font(self)
 
-        class Convert(tk.Frame, ul.w_i.WidgetInherit):
-            """UI for converting the stream into a format."""
+            class Browse(tk.Button, ul.w_i.WidgetInherit):
+                """A button that browses the user's directory."""
+                def __init__(self, parent: tk.Widget):
+                    super().__init__(parent, text="Browse...")
+                    ul.g_u.place_on_grid(self, coords=(2, 0))
+                    ul.f_u.set_font(self)
+
+        class SaveControl(tk.Frame, ul.w_i.WidgetInherit):
+            """Contains buttons for confirming the data inputted."""
             def __init__(self, parent: tk.Widget):
-                super().__init__(parent)
-                ul.g_u.place_on_grid(self, coords=(1, 1))
-                ul.g_u.set_weights(self, _x=(1, 3))
+                super().__init__(parent, **ul.df.FRAME)
+                ul.g_u.place_on_grid(self, coords=(0, 3))
+                ul.g_u.set_weights(self, _x=(1, 1))
 
-                self.w_title = self.Title(self)
-                self.w_list = self.List(self)
+                self.w_confirm = self.Confirm(self)
+                self.w_cancel = self.Cancel(self)
 
-            class Title(tk.Label, ul.w_i.WidgetInherit):
-                """The title."""
+            class Confirm(tk.Button, ul.w_i.WidgetInherit):
+                """A button that confirms the data inputted."""
                 def __init__(self, parent: tk.Widget):
-                    super().__init__(parent, text="Convert to:")
+                    super().__init__(parent, text="Confirm")
                     ul.g_u.place_on_grid(self)
-                    ul.f_u.set_font(self, size_mult=2, bold=True)
+                    ul.f_u.set_font(self)
 
-            class List(tk.Listbox, ul.w_i.WidgetInherit):
-                """List of formats to convert to."""
+            class Cancel(tk.Button, ul.w_i.WidgetInherit):
+                """A button that cancels the data inputted."""
                 def __init__(self, parent: tk.Widget):
-                    super().__init__(parent)
+                    super().__init__(parent, text="Cancel")
                     ul.g_u.place_on_grid(self, coords=(1, 0))
                     ul.f_u.set_font(self)

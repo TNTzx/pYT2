@@ -43,9 +43,6 @@ class TaskList(tk.Frame, ul.w_i.WidgetInherit):
                 ul.g_u.place_on_grid(self)
                 ul.f_u.set_font(self)
 
-                for i in range(100):
-                    self.insert(tk.END, list(range(i, 100)))
-
         class XScroll(tk.Scrollbar, ul.w_i.WidgetInherit):
             """Horizontal Scrollbar."""
             def __init__(self, parent: tk.Widget):
