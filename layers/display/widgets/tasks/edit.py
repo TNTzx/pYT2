@@ -5,6 +5,7 @@ import tkinter as tk
 import pytube as yt
 
 import layers.display.utils as ul
+import layers.backend.convert_forms as c_f
 import layers.library.yt_other as yt_o
 
 
@@ -14,6 +15,7 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
         super().__init__()
         ul.g_u.set_weights(self)
         self.geometry("1000x600")
+        self.wm_title("Task Manager")
 
         self.w_frame = self.MainFrame(self)
 
@@ -37,7 +39,7 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
         class Title(tk.Label, ul.w_i.WidgetInherit):
             """The title."""
             def __init__(self, parent: tk.Widget):
-                super().__init__(parent, text="Add / Edit Task")
+                super().__init__(parent, text="Task Manager")
                 ul.g_u.place_on_grid(self)
                 ul.f_u.set_font(self, size_mult=3, bold=True)
 
@@ -63,7 +65,7 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
                 """The input field."""
                 def __init__(self, parent: tk.Widget):
                     super().__init__(parent)
-                    ul.g_u.place_on_grid(self, coords=(1, 0))
+                    ul.g_u.place_on_grid(self, coords=(1, 0), ipad_set=(5, 0))
                     ul.f_u.set_font(self)
 
             class Set(tk.Button, ul.w_i.WidgetInherit):
@@ -131,11 +133,14 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
                         ul.g_u.place_on_grid(self, coords=(1, 0))
                         ul.f_u.set_font(self)
 
+                        for convert_format in c_f.convert_formats:
+                            self.insert(tk.END, f"{convert_format.file_ext} ({convert_format.type})")
+
         class Path(tk.Frame, ul.w_i.WidgetInherit):
             """UI to get the file path."""
             def __init__(self, parent: tk.Widget):
                 super().__init__(parent, **ul.df.FRAME)
-                ul.g_u.place_on_grid(self, coords=(0, 3))
+                ul.g_u.place_on_grid(self, coords=(0, 3), ipad_set=(5, 0))
                 ul.g_u.set_weights(self, x=(1, 3, 1))
 
                 self.w_title = self.Title(self)
