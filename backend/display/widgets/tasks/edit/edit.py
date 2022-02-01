@@ -18,18 +18,27 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
         def __init__(self, parent: tk.Widget):
             super().__init__(parent, **ul.df.FRAME)
             ul.g_u.place_on_grid(self)
-            ul.g_u.set_weights(self, _y=(1, 1, 1))
+            ul.g_u.set_weights(self, _y=(1, 1, 1, 1, 1))
 
+            self.w_title = self.Title(self)
             self.w_url = self.URL(self)
             self.w_options = self.Options(self)
             self.w_path = self.Path(self)
+            self.w_save = self.SaveControl(self)
+        
+        class Title(tk.Label, ul.w_i.WidgetInherit):
+            """The title."""
+            def __init__(self, parent: tk.Widget):
+                super().__init__(parent, text="Add / Edit Task")
+                ul.g_u.place_on_grid(self)
+                ul.f_u.set_font(self, size_mult=3, bold=True)
 
 
         class URL(tk.Frame, ul.w_i.WidgetInherit):
             """Contains widgets for inputting the URL."""
             def __init__(self, parent: tk.Widget):
                 super().__init__(parent, **ul.df.FRAME)
-                ul.g_u.place_on_grid(self)
+                ul.g_u.place_on_grid(self, coords=(0, 1))
                 ul.g_u.set_weights(self, _x=(1, 3, 1))
 
                 self.w_title = self.Title(self)
@@ -61,7 +70,7 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
             """Contains options for the selected URL."""
             def __init__(self, parent: tk.Widget):
                 super().__init__(parent, **ul.df.FRAME)
-                ul.g_u.place_on_grid(self, coords=(0, 1))
+                ul.g_u.place_on_grid(self, coords=(0, 2))
                 ul.g_u.set_weights(self, _x=(4, 1))
 
                 self.w_stream = self.StreamSelect(self)
@@ -119,7 +128,7 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
             """UI to get the file path."""
             def __init__(self, parent: tk.Widget):
                 super().__init__(parent, **ul.df.FRAME)
-                ul.g_u.place_on_grid(self, coords=(0, 2))
+                ul.g_u.place_on_grid(self, coords=(0, 3))
                 ul.g_u.set_weights(self, _x=(1, 3, 1))
 
                 self.w_title = self.Title(self)
@@ -151,7 +160,7 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
             """Contains buttons for confirming the data inputted."""
             def __init__(self, parent: tk.Widget):
                 super().__init__(parent, **ul.df.FRAME)
-                ul.g_u.place_on_grid(self, coords=(0, 3))
+                ul.g_u.place_on_grid(self, coords=(0, 4))
                 ul.g_u.set_weights(self, _x=(1, 1))
 
                 self.w_confirm = self.Confirm(self)
