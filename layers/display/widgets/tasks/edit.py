@@ -30,7 +30,7 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
             self.w_save = self.SaveControl(self)
 
             self.yt_obj = yt.YouTube("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")
-            self.streams_list = None
+            self.streams_info_list: list[yt_o.StreamInfo] = None
 
         class Title(tk.Label, ul.w_i.WidgetInherit):
             """The title."""
@@ -193,7 +193,9 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
             )
 
             streams: list[yt.Stream] = self.yt_obj.streams.filter(progressive=True)
-            self.update_streams_list(streams)
+            self.update_streams_info_list(streams)
 
-        def update_streams_list(self, streams: list[yt.Stream]):
-            self.streams_list = [yt_o.StreamInfo(stream) for stream in streams]
+        def update_streams_info_list(self, streams: list[yt.Stream]):
+            """Updates stream_info_list."""
+            self.streams_info_list = [yt_o.StreamInfo(stream) for stream in streams]
+            self.w_options.w_stream.w_list.insert(tk.END, *self.streams_info_list)
