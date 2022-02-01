@@ -25,9 +25,9 @@ def place_on_grid(widget: tk.Widget,
         sticky = "".join(sticks)
     )
 
-def set_weights(widget: tk.Widget, _x=(1,), _y=(1,)):
+def set_weights(widget: tk.Widget, x=(1,), y=(1,)):
     """Sets the weights for a widget, usually a Frame or a LabelFrame goes here."""
-    for idx, weight in enumerate(_x):
+    for idx, weight in enumerate(x):
         widget.columnconfigure(idx, weight=weight)
-    for idx, weight in enumerate(_y):
+    for idx, weight in enumerate(y):
         widget.rowconfigure(idx, weight=weight)

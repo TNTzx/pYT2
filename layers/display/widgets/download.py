@@ -11,7 +11,7 @@ class MainFrame(tk.Frame, ul.w_i.WidgetInherit):
     def __init__(self, parent: tk.Widget):
         super().__init__(parent, **ul.df.FRAME)
         ul.g_u.place_on_grid(self, coords=(0, 2))
-        ul.g_u.set_weights(self, _x=(1, 4))
+        ul.g_u.set_weights(self, x=(1, 4))
 
         self.w_title = self.Title(self)
         self.w_download = self.Download(self)

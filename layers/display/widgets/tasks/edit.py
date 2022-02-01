@@ -13,6 +13,7 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
     def __init__(self):
         super().__init__()
         ul.g_u.set_weights(self)
+        self.geometry("1000x600")
 
         self.w_frame = self.MainFrame(self)
 
@@ -21,15 +22,16 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
         def __init__(self, parent: tk.Widget):
             super().__init__(parent, **ul.df.FRAME)
             ul.g_u.place_on_grid(self)
-            ul.g_u.set_weights(self, _y=(1, 1, 1, 1, 1))
+            ul.g_u.set_weights(self, y=(1, 1, 1, 1, 1))
 
             self.w_title = self.Title(self)
             self.w_url = self.URL(self)
+            self.w_url.w_set.configure(command=self.set_url)
             self.w_options = self.Options(self)
             self.w_path = self.Path(self)
             self.w_save = self.SaveControl(self)
 
-            self.yt_obj = yt.YouTube("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")
+            self.yt_obj = yt.YouTube(yt_o.DEFAULT_URL)
             self.streams_info_list: list[yt_o.StreamInfo] = None
 
         class Title(tk.Label, ul.w_i.WidgetInherit):
@@ -44,7 +46,7 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
             def __init__(self, parent: tk.Widget):
                 super().__init__(parent, **ul.df.FRAME)
                 ul.g_u.place_on_grid(self, coords=(0, 1))
-                ul.g_u.set_weights(self, _x=(1, 3, 1))
+                ul.g_u.set_weights(self, x=(1, 3, 1))
 
                 self.w_title = self.Title(self)
                 self.w_input = self.Input(self)
@@ -76,7 +78,7 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
             def __init__(self, parent: tk.Widget):
                 super().__init__(parent, **ul.df.FRAME)
                 ul.g_u.place_on_grid(self, coords=(0, 2))
-                ul.g_u.set_weights(self, _x=(4, 1))
+                ul.g_u.set_weights(self, x=(4, 1))
 
                 self.w_stream = self.StreamSelect(self)
                 self.w_convert = self.Convert(self)
@@ -86,7 +88,7 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
                 def __init__(self, parent: tk.Widget):
                     super().__init__(parent, **ul.df.FRAME)
                     ul.g_u.place_on_grid(self, coords=(0, 1))
-                    ul.g_u.set_weights(self, _y=(1, 3))
+                    ul.g_u.set_weights(self, y=(1, 3))
 
                     self.w_title = self.Title(self)
                     self.w_list = self.Listbox(self)
@@ -110,7 +112,7 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
                 def __init__(self, parent: tk.Widget):
                     super().__init__(parent, **ul.df.FRAME)
                     ul.g_u.place_on_grid(self, coords=(1, 1))
-                    ul.g_u.set_weights(self, _x=(1, 1))
+                    ul.g_u.set_weights(self, x=(1, 1))
 
                     self.w_title = self.Title(self)
                     self.w_list = self.List(self)
@@ -134,7 +136,7 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
             def __init__(self, parent: tk.Widget):
                 super().__init__(parent, **ul.df.FRAME)
                 ul.g_u.place_on_grid(self, coords=(0, 3))
-                ul.g_u.set_weights(self, _x=(1, 3, 1))
+                ul.g_u.set_weights(self, x=(1, 3, 1))
 
                 self.w_title = self.Title(self)
                 self.w_input = self.Input(self)
@@ -166,7 +168,7 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
             def __init__(self, parent: tk.Widget):
                 super().__init__(parent, **ul.df.FRAME)
                 ul.g_u.place_on_grid(self, coords=(0, 4))
-                ul.g_u.set_weights(self, _x=(1, 1))
+                ul.g_u.set_weights(self, x=(1, 1))
 
                 self.w_confirm = self.Confirm(self)
                 self.w_cancel = self.Cancel(self)
@@ -197,5 +199,8 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
 
         def update_streams_info_list(self, streams: list[yt.Stream]):
             """Updates stream_info_list."""
-            self.streams_info_list = [yt_o.StreamInfo(stream) for stream in streams]
-            self.w_options.w_stream.w_list.insert(tk.END, *self.streams_info_list)
+            self.streams_info_list = list(reversed(
+                [yt_o.StreamInfo(stream) for stream in streams]
+            ))
+            for stream_info in self.streams_info_list:
+                self.w_options.w_stream.w_list.insert(tk.END, stream_info.info)
