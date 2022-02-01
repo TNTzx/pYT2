@@ -1,8 +1,11 @@
 """UI for editing a specific task."""
 
+
 import tkinter as tk
+import pytube as yt
 
 import layers.display.utils as ul
+import layers.library.yt_other as yt_o
 
 
 class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
@@ -25,14 +28,16 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
             self.w_options = self.Options(self)
             self.w_path = self.Path(self)
             self.w_save = self.SaveControl(self)
-        
+
+            self.yt_obj = yt.YouTube("https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley")
+            self.streams_list = None
+
         class Title(tk.Label, ul.w_i.WidgetInherit):
             """The title."""
             def __init__(self, parent: tk.Widget):
                 super().__init__(parent, text="Add / Edit Task")
                 ul.g_u.place_on_grid(self)
                 ul.f_u.set_font(self, size_mult=3, bold=True)
-
 
         class URL(tk.Frame, ul.w_i.WidgetInherit):
             """Contains widgets for inputting the URL."""
@@ -179,3 +184,16 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
                     super().__init__(parent, text="Cancel")
                     ul.g_u.place_on_grid(self, coords=(1, 0))
                     ul.f_u.set_font(self)
+
+
+        def set_url(self):
+            """Sets the URL and changes the UI."""
+            self.yt_obj = yt.YouTube(
+                self.w_url.w_input.get()
+            )
+
+            streams: list[yt.Stream] = self.yt_obj.streams.filter(progressive=True)
+            self.update_streams_list(streams)
+
+        def update_streams_list(self, streams: list[yt.Stream]):
+            self.streams_list = [yt_o.StreamInfo(stream) for stream in streams]

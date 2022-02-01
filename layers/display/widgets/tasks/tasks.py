@@ -3,7 +3,7 @@
 import tkinter as tk
 
 import layers.display.utils as ul
-import layers.display.widgets.tasks.edit.edit as ed
+import layers.display.widgets.tasks.edit as ed
 
 
 class TaskList(tk.Frame, ul.w_i.WidgetInherit):
@@ -31,7 +31,7 @@ class TaskList(tk.Frame, ul.w_i.WidgetInherit):
             self.w_hor_scrollbar.configure(command=self.w_list.xview)
             self.w_vert_scrollbar.configure(command=self.w_list.yview)
             self.w_list.configure(
-                xscrollcommand=self.w_hor_scrollbar,
+                xscrollcommand=self.w_hor_scrollbar.set,
                 yscrollcommand=self.w_vert_scrollbar.set
             )
 
