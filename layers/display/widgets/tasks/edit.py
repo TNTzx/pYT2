@@ -1,11 +1,13 @@
 """UI for editing a specific task."""
 
 
+import threading as thr
 import tkinter as tk
 import tkinter.filedialog as tkfd
 import pytube as yt
 
 import layers.display.utils as ul
+import layers.display.widgets.tasks.loading_url as l_u
 import layers.library.task as tsk
 import layers.library.convert_forms as c_f
 import layers.library.yt_other as yt_o
@@ -18,6 +20,7 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
         ul.g_u.set_weights(self)
         self.geometry("1000x600")
         self.wm_title("Task Manager")
+        ul.w_u.center_window(self)
 
         self.w_frame = self.MainFrame(self)
 
@@ -204,12 +207,18 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
 
         def set_url(self):
             """Sets the URL and changes the UI."""
-            self.task.yt_obj = yt.YouTube(
-                self.w_url.w_input.get()
-            )
+            w_loading = l_u.Loading()
+            def task():
+                self.task.yt_obj = yt.YouTube(
+                    self.w_url.w_input.get()
+                )
 
-            streams: list[yt.Stream] = self.task.yt_obj.streams.filter(progressive=True)
-            self.update_streams_info_dict(streams)
+                streams: list[yt.Stream] = self.task.yt_obj.streams.filter(progressive=True)
+                self.update_streams_info_dict(streams)
+
+                w_loading.destroy()
+
+            thr.Thread(target=task).start()
 
         def update_streams_info_dict(self, streams: list[yt.Stream]):
             """Updates stream_info_dict."""
@@ -226,22 +235,24 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
             return self.streams_info_dict[
                 ul.o_u.get_str_of_selected(self.w_options.w_stream.w_list)[0]
             ]
-        
+
         def get_selected_format(self):
             """Gets the selected format."""
-            return 
+            return c_f.convert_format_dict[
+                ul.o_u.get_str_of_selected(self.w_options.w_convert.w_list)[0]
+            ]
 
 
         def browse_for_output_path(self):
             """Opens a file dialog to get a path store the output file."""
             title = self.task.yt_obj.title
-            default_file_name = f"{title}.{self.get_selected_stream().stream.subtype}"
+            default_file_name = f"{title}.{self.get_selected_format().file_ext}"
             file_path = tkfd.asksaveasfilename(
                 initialfile = default_file_name,
-                filetypes = [
+                filetypes = [("All Files", ".*")] + [
                     (convert_format.type, convert_format.file_ext)
                     for convert_format in c_f.convert_formats
-                ] + [("All Files", ".*")]
+                ]
             )
 
             self.w_path.w_input.variable.set(file_path)

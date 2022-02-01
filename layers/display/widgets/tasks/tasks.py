@@ -39,7 +39,7 @@ class TaskList(tk.Frame, ul.w_i.WidgetInherit):
         class List(tk.Listbox, ul.w_i.WidgetInherit):
             """List of tasks."""
             def __init__(self, parent: tk.Widget):
-                super().__init__(parent)
+                super().__init__(parent, exportselection=False)
                 ul.g_u.place_on_grid(self)
                 ul.f_u.set_font(self)
 
