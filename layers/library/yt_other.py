@@ -12,4 +12,8 @@ class StreamInfo():
     """Includes info for a stream, as well as the Stream object itself."""
     def __init__(self, stream: yt.Stream):
         self.stream = stream
-        self.info = f"({stream.mime_type}) {stream.resolution} [ {o_f.bytes_to_mb(stream.filesize)} MB ]"
+        self.info = stream_to_str(stream)
+
+def stream_to_str(stream: yt.Stream):
+    """Turns the Stream into a string for UI purposes."""
+    return f"({stream.mime_type}) {stream.resolution} [ {o_f.bytes_to_mb(stream.filesize)} MB ]"

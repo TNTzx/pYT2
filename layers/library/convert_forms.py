@@ -12,8 +12,8 @@ class ConvertFormat():
 
     class Types():
         """Types of convert formats."""
-        video = "video"
-        audio = "audio"
+        video = "Video"
+        audio = "Audio"
 
 convert_formats = [
     ConvertFormat("mp4", ConvertFormat.Types.video),
@@ -21,11 +21,11 @@ convert_formats = [
 ]
 
 
-def convert_format_str(convert_format: ConvertFormat):
+def convert_format_to_str(convert_format: ConvertFormat):
     """Converts a ConvertFormat into a string for UI purposes."""
     return f"{convert_format.file_ext} ({convert_format.type})"
 
 convert_format_dict = {
-    convert_format_str(convert_format): convert_format
+    convert_format_to_str(convert_format): convert_format
     for convert_format in convert_formats
 }

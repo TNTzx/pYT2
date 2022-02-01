@@ -3,18 +3,24 @@
 
 import pytube as yt
 
+import layers.library.convert_forms as c_f
+
 
 class Task():
     """A task."""
     def __init__(
             self,
-            stream: yt.Stream,
-            convert_form: str,
-            output_path: str
+            yt_obj: yt.YouTube,
+            selected_stream: str = None,
+            selected_convert_form: str = None,
+            output_path: str = None
             ):
-        self.stream = stream
-        self.convert_form = convert_form
+        self.yt_obj = yt_obj
+        self.selected_stream = selected_stream
+        self.selected_convert_form = selected_convert_form
         self.output_path = output_path
 
     def download(self):
         """Download the task."""
+
+tasks: list[Task] = []
