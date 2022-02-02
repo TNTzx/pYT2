@@ -20,7 +20,14 @@ class Task():
         self.selected_convert_form = selected_convert_form
         self.output_path = output_path
 
+    def __repr__(self):
+        pass
+
+
     def download(self):
         """Download the task."""
 
 tasks: list[Task] = []
+
+def get_task_str(task: Task):
+    """Returns the string representation of the task."""

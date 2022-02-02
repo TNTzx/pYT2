@@ -4,6 +4,7 @@
 import threading as thr
 import tkinter as tk
 import tkinter.filedialog as tkfd
+import tkinter.messagebox as tkmsg
 import pytube as yt
 
 import layers.display.utils as ul
@@ -11,6 +12,13 @@ import layers.display.widgets.tasks.loading_url as l_u
 import layers.library.task as tsk
 import layers.library.convert_forms as c_f
 import layers.library.yt_other as yt_o
+
+
+def spawn_window():
+    """Spawns the window then returns the Task."""
+    window = MainWindow()
+    window.wait_window()
+    return window.task
 
 
 class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
@@ -23,6 +31,12 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
         ul.w_u.center_window(self)
 
         self.w_frame = self.MainFrame(self)
+        self.w_frame.w_url.w_set.configure(command=self.set_url)
+        self.w_frame.w_path.w_set.configure(command=self.browse_for_output_path)
+        self.w_frame.w_save.w_confirm.configure(command=self.confirm)
+
+        self.task = tsk.Task(yt.YouTube(yt_o.DEFAULT_URL))
+        self.streams_info_list: list[yt_o.StreamInfo] = None
 
     class MainFrame(tk.Frame, ul.w_i.WidgetInherit):
         """The main frame."""
@@ -32,20 +46,10 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
             ul.g_u.set_weights(self, y=(1, 1, 1, 1, 1))
 
             self.w_title = self.Title(self)
-
             self.w_url = self.URL(self)
-            self.w_url.w_set.configure(command=self.set_url)
-
             self.w_options = self.Options(self)
-
             self.w_path = self.Path(self)
-            self.w_path.w_set.configure(command=self.browse_for_output_path)
-
             self.w_save = self.SaveControl(self)
-
-
-            self.task = tsk.Task(yt.YouTube(yt_o.DEFAULT_URL))
-            self.streams_info_dict: dict[str, yt_o.StreamInfo] = None
 
         class Title(tk.Label, ul.w_i.WidgetInherit):
             """The title."""
@@ -144,8 +148,7 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
                         ul.g_u.place_on_grid(self, coords=(1, 0))
                         ul.f_u.set_font(self)
 
-                        for convert_format in c_f.convert_formats:
-                            self.insert(tk.END, c_f.convert_format_to_str(convert_format))
+                        ul.l_u.update_listbox(self, c_f.convert_formats)
 
         class Path(tk.Frame, ul.w_i.WidgetInherit):
             """UI to get the file path."""
@@ -205,54 +208,63 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
                     ul.f_u.set_font(self)
 
 
-        def set_url(self):
-            """Sets the URL and changes the UI."""
-            w_loading = l_u.Loading()
-            def task():
-                self.task.yt_obj = yt.YouTube(
-                    self.w_url.w_input.get()
-                )
-
-                streams: list[yt.Stream] = self.task.yt_obj.streams.filter(progressive=True)
-                self.update_streams_info_dict(streams)
-
-                w_loading.destroy()
-
-            thr.Thread(target=task).start()
-
-        def update_streams_info_dict(self, streams: list[yt.Stream]):
-            """Updates stream_info_dict."""
-            self.streams_info_dict = {
-                yt_o.stream_to_str(stream): yt_o.StreamInfo(stream)
-                for stream in reversed(streams)
-            }
-            for stream_info in self.streams_info_dict:
-                self.w_options.w_stream.w_list.insert(tk.END, stream_info)
-
-
-        def get_selected_stream(self):
-            """Gets the selected stream_info."""
-            return self.streams_info_dict[
-                ul.o_u.get_str_of_selected(self.w_options.w_stream.w_list)[0]
-            ]
-
-        def get_selected_format(self):
-            """Gets the selected format."""
-            return c_f.convert_format_dict[
-                ul.o_u.get_str_of_selected(self.w_options.w_convert.w_list)[0]
-            ]
-
-
-        def browse_for_output_path(self):
-            """Opens a file dialog to get a path store the output file."""
-            title = self.task.yt_obj.title
-            default_file_name = f"{title}.{self.get_selected_format().file_ext}"
-            file_path = tkfd.asksaveasfilename(
-                initialfile = default_file_name,
-                filetypes = [("All Files", ".*")] + [
-                    (convert_format.type, convert_format.file_ext)
-                    for convert_format in c_f.convert_formats
-                ]
+    def set_url(self):
+        """Sets the URL and changes the UI."""
+        w_loading = l_u.Loading()
+        def task():
+            self.task.yt_obj = yt.YouTube(
+                self.w_frame.w_url.w_input.get()
             )
 
-            self.w_path.w_input.variable.set(file_path)
+            streams: list[yt.Stream] = self.task.yt_obj.streams.filter(progressive=True)
+            self.update_streams_info_list(streams)
+
+            w_loading.destroy()
+
+        thr.Thread(target=task).start()
+
+    def update_streams_info_list(self, streams: list[yt.Stream]):
+        """Updates stream_info_dict."""
+        self.streams_info_list = [yt_o.StreamInfo(stream) for stream in reversed(streams)]
+        ul.l_u.update_listbox(self.w_frame.w_options.w_convert.w_list, self.streams_info_list)
+
+
+    def get_selected_stream(self) -> yt.Stream:
+        """Gets the selected stream_info."""
+        return ul.l_u.get_selected(self.w_frame.w_options.w_stream.w_list, self.streams_info_list)
+
+    def get_selected_format(self) -> c_f.ConvertFormat:
+        """Gets the selected format."""
+        return ul.l_u.get_selected(self.w_frame.w_options.w_convert.w_list, c_f.convert_formats)
+
+
+    def browse_for_output_path(self):
+        """Opens a file dialog to get a path store the output file."""
+        title = self.task.yt_obj.title
+        default_file_name = f"{title}.{self.get_selected_format().file_ext}"
+        file_path = tkfd.asksaveasfilename(
+            initialfile = default_file_name,
+            filetypes = [("All Files", ".*")] + [
+                (convert_format.type, convert_format.file_ext)
+                for convert_format in c_f.convert_formats
+            ]
+        )
+
+        self.w_frame.w_path.w_input.variable.set(file_path)
+
+    def confirm(self):
+        """Confirm the inputs."""
+        confirm = tkmsg.askokcancel("Confirm", "Confirm these options for the current task?")
+        if confirm:
+            self.task.selected_stream = self.get_selected_stream()
+            self.task.selected_convert_form = self.get_selected_format()
+            self.task.output_path = self.w_frame.w_path.w_input.variable.get()
+
+            self.destroy()
+
+    def cancel(self):
+        """Cancel the inputs."""
+        cancel = tkmsg.askokcancel("Cancel", "Cancel the current task?")
+        if cancel:
+            self.task = None
+            self.destroy()
