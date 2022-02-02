@@ -48,6 +48,7 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
         self.w_frame.w_url.w_set.configure(command=self.set_url)
         self.w_frame.w_path.w_set.configure(command=self.browse_for_output_path)
         self.w_frame.w_save.w_confirm.configure(command=self.confirm)
+        self.w_frame.w_save.w_cancel.configure(command=self.cancel)
 
         self.task = tsk.Task(yt.YouTube(yt_o.DEFAULT_URL))
         self.streams_info_list: list[yt_o.StreamInfo] = None

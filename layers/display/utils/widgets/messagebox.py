@@ -11,9 +11,9 @@ class Messagebox(tk.Toplevel, ul.w_i.WidgetInherit):
     """Represents a message box."""
     def __init__(self, parent: tk.Widget, title: str, description: str):
         super().__init__(parent)
-        self.deiconify()
         self.title(title)
         ul.g_u.set_weights(self, y=(1, 1))
+        ul.w_u.set_size(self, ul.w_u.Dimension(len(description) * ul.df.FONT_SIZE_BASE, ul.df.FONT_SIZE_BASE * 5 * 2))
         ul.w_u.center_window(self)
 
         self.w_description = self.Description(self, description)
@@ -39,17 +39,18 @@ class Messagebox(tk.Toplevel, ul.w_i.WidgetInherit):
     class Button(tk.Button, ul.w_i.WidgetInherit):
         """Button."""
         def __init__(self, parent: tk.Widget, text: str, command: typ.Callable = None):
-            super().__init__(parent, text=text)
+            super().__init__(parent, text=text, command=command)
             ul.f_u.set_font(self)
             self.text = text
 
-    def set_value(self, value: int):
+    def set_value(self, value: str):
         """Set the value of self.value."""
         self.value = value
+        self.destroy()
 
     def add_button(self, text: str):
         """Adds a button to the message box."""
-        button = self.Button(self.w_button_frame, text, command = lambda _: self.set_value(text))
+        button = self.Button(self.w_button_frame, text, command=lambda: self.set_value(text))
         self.buttons.append(button)
 
 
@@ -60,11 +61,10 @@ class Messagebox(tk.Toplevel, ul.w_i.WidgetInherit):
 
         ul.g_u.set_weights(self.w_button_frame, x=[1 for _ in self.buttons])
 
-        self.iconify()
         self.wait_window()
 
         return self.value
-    
+
 
 class Options():
     """Contains the options available."""
