@@ -107,7 +107,7 @@ class MainFrame(tk.Frame, ul.w_i.WidgetInherit):
                 """Add a task."""
                 def __init__(self, parent: tk.Widget):
                     super().__init__(parent, text="Remove Task", coords=(0, 2))
-    
+
 
     def add_task(self):
         """Adds a task."""

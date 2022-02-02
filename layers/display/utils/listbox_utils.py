@@ -1,4 +1,4 @@
-"""Other utilities."""
+"""Listbox utilities."""
 
 
 import tkinter as tk

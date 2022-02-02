@@ -1,27 +1,8 @@
 """Main."""
 
-import tkinter as tk
 
-import layers.display.utils as ul
-import layers.display.widgets as wg
-
-
-class FrameMain(tk.Frame, ul.w_i.WidgetInherit):
-    """Main frame."""
-    def __init__(self, parent: tk.Widget):
-        super().__init__(parent, **ul.df.FRAME)
-        ul.g_u.place_on_grid(self)
-        ul.g_u.set_weights(self, y=(1, 3, 1))
-
-        self.w_title = wg.title.MainFrame(self)
-        self.w_tasks = wg.tasks.tasks.MainFrame(self)
-        self.w_download = wg.dl.MainFrame(self)
+import layers.display.widgets.main_window as m_w
 
 
 if __name__ == "__main__":
-    main = tk.Tk()
-    ul.g_u.set_weights(main)
-    ul.w_u.set_size(main, ul.w_u.Dimension(1000, 600))
-    ul.w_u.center_window(main)
-    frame_main = FrameMain(main)
-    main.mainloop()
+    main = m_w.MainWindow()
