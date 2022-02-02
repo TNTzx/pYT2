@@ -4,30 +4,32 @@
 import threading as thr
 import tkinter as tk
 import tkinter.filedialog as tkfd
-import tkinter.messagebox as tkmsg
 import pytube as yt
 
 import layers.display.utils as ul
+import layers.display.utils.widgets.messagebox as msgbox
 import layers.display.widgets.tasks.loading_url as l_u
 import layers.library.task as tsk
 import layers.library.convert_forms as c_f
 import layers.library.yt_other as yt_o
 
 
-def spawn_window(task: tsk.Task | None = None):
+def spawn_window(parent: tk.Widget, task: tsk.Task | None = None):
     """Spawns the window then returns the Task."""
-    window = MainWindow()
+    window = MainWindow(parent)
     if task is not None:
         window.w_frame.w_url.w_input.variable.set(task.yt_obj.watch_url)
         streams_info_list = task.yt_obj.streams.filter(progressive=True)
         window.update_streams_info_list(streams_info_list)
         window.w_frame.w_options.w_stream.w_list.selection_set(
-            streams_info_list.index(task.selected_stream)
+            list(reversed(streams_info_list)).index(task.selected_stream.stream)
         )
         window.w_frame.w_options.w_convert.w_list.selection_set(
             c_f.convert_formats.index(task.selected_convert_form)
         )
         window.w_frame.w_path.w_input.variable.set(task.output_path)
+
+        window.task = task
 
     window.wait_window()
     return window.task
@@ -35,8 +37,8 @@ def spawn_window(task: tsk.Task | None = None):
 
 class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
     """The main window."""
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent: tk.Widget):
+        super().__init__(parent)
         ul.g_u.set_weights(self)
         self.geometry("1000x600")
         self.wm_title("Task Manager")
@@ -256,6 +258,7 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
         title = self.task.yt_obj.title
         default_file_name = f"{title}.{self.get_selected_format().file_ext}"
         file_path = tkfd.asksaveasfilename(
+            parent = self,
             initialfile = default_file_name,
             filetypes = [("All Files", ".*")] + [
                 (convert_format.type, convert_format.file_ext)
@@ -267,8 +270,11 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
 
     def confirm(self):
         """Confirm the inputs."""
-        confirm = tkmsg.askokcancel("Confirm", "Confirm these options for the current task?")
-        if confirm:
+        confirm = msgbox.messagebox(
+            self, "Confirm", "Are you sure you want to create / edit this task?",
+            (msgbox.Options.submit, msgbox.Options.no)
+        )
+        if confirm == msgbox.Options.submit:
             self.task.selected_stream = self.get_selected_stream()
             self.task.selected_convert_form = self.get_selected_format()
             self.task.output_path = self.w_frame.w_path.w_input.variable.get()
@@ -277,7 +283,10 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
 
     def cancel(self):
         """Cancel the inputs."""
-        cancel = tkmsg.askokcancel("Cancel", "Cancel the current task?")
-        if cancel:
+        cancel = msgbox.messagebox(
+            self, "Cancel", "Are you sure you want to cancel creating / editing this task?",
+            (msgbox.Options.cancel, msgbox.Options.no)
+        )
+        if cancel == msgbox.Options.cancel:
             self.task = None
             self.destroy()

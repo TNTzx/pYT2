@@ -21,6 +21,7 @@ class MainWindow(tk.Tk):
         self.w_frame = self.FrameMain(self)
 
         self.w_frame.w_tasks.w_control.w_controls.w_add.configure(command=self.add_task)
+        self.w_frame.w_tasks.w_control.w_controls.w_edit.configure(command=self.edit_task)
 
         self.tasks: list[tsk.Task] = []
 
@@ -87,7 +88,7 @@ class MainWindow(tk.Tk):
 
     def add_task(self):
         """Add a task."""
-        task = tske.spawn_window()
+        task = tske.spawn_window(self)
         if task is None:
             return
 
@@ -96,8 +97,9 @@ class MainWindow(tk.Tk):
 
     def edit_task(self):
         """Edit the selected task."""
-        task = ul.l_u.get_selected(self.w_frame.w_tasks.w_control.w_list.w_list, self.tasks)
-        new_task = tske.spawn_window(task)
+        task = ul.l_u.get_selected(self.w_frame.w_tasks.w_control.w_list.w_list, self.tasks)[0]
+        new_task = tske.spawn_window(self, task)
 
-        o_f.replace_item_in_list(self.tasks, task, new_task)
+        if new_task is not None:
+            o_f.replace_item_in_list(self.tasks, task, new_task)
         self.update_listbox()
