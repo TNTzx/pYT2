@@ -14,9 +14,21 @@ import layers.library.convert_forms as c_f
 import layers.library.yt_other as yt_o
 
 
-def spawn_window():
+def spawn_window(task: tsk.Task | None = None):
     """Spawns the window then returns the Task."""
     window = MainWindow()
+    if task is not None:
+        window.w_frame.w_url.w_input.variable.set(task.yt_obj.watch_url)
+        streams_info_list = task.yt_obj.streams.filter(progressive=True)
+        window.update_streams_info_list(streams_info_list)
+        window.w_frame.w_options.w_stream.w_list.selection_set(
+            streams_info_list.index(task.selected_stream)
+        )
+        window.w_frame.w_options.w_convert.w_list.selection_set(
+            c_f.convert_formats.index(task.selected_convert_form)
+        )
+        window.w_frame.w_path.w_input.variable.set(task.output_path)
+
     window.wait_window()
     return window.task
 
@@ -79,7 +91,8 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
             class Input(tk.Entry, ul.w_i.WidgetInherit):
                 """The input field."""
                 def __init__(self, parent: tk.Widget):
-                    super().__init__(parent)
+                    self.variable = tk.StringVar()
+                    super().__init__(parent, textvariable=self.variable)
                     ul.g_u.place_on_grid(self, coords=(1, 0), ipad_set=(5, 0))
                     ul.f_u.set_font(self)
 
@@ -226,16 +239,16 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
     def update_streams_info_list(self, streams: list[yt.Stream]):
         """Updates stream_info_dict."""
         self.streams_info_list = [yt_o.StreamInfo(stream) for stream in reversed(streams)]
-        ul.l_u.update_listbox(self.w_frame.w_options.w_convert.w_list, self.streams_info_list)
+        ul.l_u.update_listbox(self.w_frame.w_options.w_stream.w_list, self.streams_info_list)
 
 
     def get_selected_stream(self) -> yt.Stream:
         """Gets the selected stream_info."""
-        return ul.l_u.get_selected(self.w_frame.w_options.w_stream.w_list, self.streams_info_list)
+        return ul.l_u.get_selected(self.w_frame.w_options.w_stream.w_list, self.streams_info_list)[0]
 
     def get_selected_format(self) -> c_f.ConvertFormat:
         """Gets the selected format."""
-        return ul.l_u.get_selected(self.w_frame.w_options.w_convert.w_list, c_f.convert_formats)
+        return ul.l_u.get_selected(self.w_frame.w_options.w_convert.w_list, c_f.convert_formats)[0]
 
 
     def browse_for_output_path(self):

@@ -5,6 +5,7 @@ import tkinter as tk
 import layers.display.utils as ul
 import layers.display.widgets.tasks.edit as ed
 
+
 class MainFrame(tk.Frame, ul.w_i.WidgetInherit):
     """Main frame for the tasks menu."""
     def __init__(self, parent: tk.Widget):
@@ -56,7 +57,7 @@ class MainFrame(tk.Frame, ul.w_i.WidgetInherit):
             class List(tk.Listbox, ul.w_i.WidgetInherit):
                 """List of tasks."""
                 def __init__(self, parent: tk.Widget):
-                    super().__init__(parent, exportselection=False)
+                    super().__init__(parent, selectmode=tk.MULTIPLE, exportselection=False)
                     ul.g_u.place_on_grid(self)
                     ul.f_u.set_font(self)
 
@@ -107,7 +108,3 @@ class MainFrame(tk.Frame, ul.w_i.WidgetInherit):
                 """Add a task."""
                 def __init__(self, parent: tk.Widget):
                     super().__init__(parent, text="Remove Task", coords=(0, 2))
-
-
-    def add_task(self):
-        """Adds a task."""
