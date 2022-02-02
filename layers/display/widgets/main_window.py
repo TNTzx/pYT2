@@ -23,6 +23,7 @@ class MainWindow(tk.Tk):
 
         self.w_frame.w_tasks.w_control.w_controls.w_add.configure(command=self.add_task)
         self.w_frame.w_tasks.w_control.w_controls.w_edit.configure(command=self.edit_task)
+        self.w_frame.w_tasks.w_control.w_controls.w_remove.configure(command=self.remove_task)
 
         self.tasks: list[tsk.Task] = []
 
@@ -114,3 +115,4 @@ class MainWindow(tk.Tk):
         if remove == msgbox.Options.yes:
             to_be_deleted_tasks = ul.l_u.get_selected(self.w_frame.w_tasks.w_control.w_list.w_list, self.tasks)
             self.tasks = o_f.subtract_lists(self.tasks, to_be_deleted_tasks)
+        self.update_listbox()
