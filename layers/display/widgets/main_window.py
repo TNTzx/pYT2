@@ -4,6 +4,7 @@
 import tkinter as tk
 
 import layers.display.utils as ul
+import layers.display.utils.widgets.messagebox as msgbox
 import layers.display.widgets.tasks.tasks as tsks
 import layers.display.widgets.tasks.edit as tske
 import layers.library.task as tsk
@@ -103,3 +104,13 @@ class MainWindow(tk.Tk):
         if new_task is not None:
             o_f.replace_item_in_list(self.tasks, task, new_task)
         self.update_listbox()
+
+    def remove_task(self):
+        """Removes the selected tasks."""
+        remove = msgbox.messagebox(
+            self, "Remove Confirmation", "Are you sure you want to remove the following tasks? This cannot be undone!",
+            (msgbox.Options.yes, msgbox.Options.no)
+        )
+        if remove == msgbox.Options.yes:
+            to_be_deleted_tasks = ul.l_u.get_selected(self.w_frame.w_tasks.w_control.w_list.w_list, self.tasks)
+            self.tasks = o_f.subtract_lists(self.tasks, to_be_deleted_tasks)

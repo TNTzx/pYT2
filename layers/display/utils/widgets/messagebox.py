@@ -12,6 +12,7 @@ class Messagebox(tk.Toplevel, ul.w_i.WidgetInherit):
     def __init__(self, parent: tk.Widget, title: str, description: str):
         super().__init__(parent)
         self.title(title)
+        self.focus_set()
         ul.g_u.set_weights(self, y=(1, 1))
         ul.w_u.set_size(self, ul.w_u.Dimension(len(description) * ul.df.FONT_SIZE_BASE, ul.df.FONT_SIZE_BASE * 5 * 2))
         ul.w_u.center_window(self)

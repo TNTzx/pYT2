@@ -42,6 +42,7 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
         ul.g_u.set_weights(self)
         self.geometry("1000x600")
         self.wm_title("Task Manager")
+        self.focus_set()
         ul.w_u.center_window(self)
 
         self.w_frame = self.MainFrame(self)
