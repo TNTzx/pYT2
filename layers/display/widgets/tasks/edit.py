@@ -14,8 +14,9 @@ import layers.library.convert_forms as c_f
 import layers.library.yt_other as yt_o
 
 
-def spawn_window(parent: tk.Widget, task: tsk.Task | None = None):
+def spawn_window(parent: ul.w_i.WidgetInherit, task: tsk.Task | None = None):
     """Spawns the window then returns the Task."""
+    parent.enable(False)
     window = MainWindow(parent)
     if task is not None:
         window.w_frame.w_url.w_input.variable.set(task.yt_obj.watch_url)
@@ -37,7 +38,7 @@ def spawn_window(parent: tk.Widget, task: tsk.Task | None = None):
 
 class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
     """The main window."""
-    def __init__(self, parent: tk.Widget):
+    def __init__(self, parent: ul.w_i.WidgetInherit):
         super().__init__(parent)
         ul.g_u.set_weights(self)
         self.geometry("1000x600")
@@ -56,7 +57,7 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
 
     class MainFrame(tk.Frame, ul.w_i.WidgetInherit):
         """The main frame."""
-        def __init__(self, parent: tk.Widget):
+        def __init__(self, parent: ul.w_i.WidgetInherit):
             super().__init__(parent, **ul.df.FRAME)
             ul.g_u.place_on_grid(self)
             ul.g_u.set_weights(self, y=(1, 1, 1, 1, 1))
@@ -69,14 +70,14 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
 
         class Title(tk.Label, ul.w_i.WidgetInherit):
             """The title."""
-            def __init__(self, parent: tk.Widget):
+            def __init__(self, parent: ul.w_i.WidgetInherit):
                 super().__init__(parent, text="Task Manager")
                 ul.g_u.place_on_grid(self)
                 ul.f_u.set_font(self, size_mult=3, bold=True)
 
         class URL(tk.Frame, ul.w_i.WidgetInherit):
             """Contains widgets for inputting the URL."""
-            def __init__(self, parent: tk.Widget):
+            def __init__(self, parent: ul.w_i.WidgetInherit):
                 super().__init__(parent, **ul.df.FRAME)
                 ul.g_u.place_on_grid(self, coords=(0, 1))
                 ul.g_u.set_weights(self, x=(1, 3, 1))
@@ -87,14 +88,14 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
 
             class Title(tk.Label, ul.w_i.WidgetInherit):
                 """The title."""
-                def __init__(self, parent: tk.Widget):
+                def __init__(self, parent: ul.w_i.WidgetInherit):
                     super().__init__(parent, text="Set URL")
                     ul.g_u.place_on_grid(self)
                     ul.f_u.set_font(self, size_mult=2, bold=True)
 
             class Input(tk.Entry, ul.w_i.WidgetInherit):
                 """The input field."""
-                def __init__(self, parent: tk.Widget):
+                def __init__(self, parent: ul.w_i.WidgetInherit):
                     self.variable = tk.StringVar()
                     super().__init__(parent, textvariable=self.variable)
                     ul.g_u.place_on_grid(self, coords=(1, 0), ipad_set=(5, 0))
@@ -102,14 +103,14 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
 
             class Set(tk.Button, ul.w_i.WidgetInherit):
                 """A button that sets the current URL from the entry box."""
-                def __init__(self, parent: tk.Widget):
+                def __init__(self, parent: ul.w_i.WidgetInherit):
                     super().__init__(parent, text="Set URL")
                     ul.g_u.place_on_grid(self, coords=(2, 0))
                     ul.f_u.set_font(self)
 
         class Options(tk.Frame, ul.w_i.WidgetInherit):
             """Contains options for the selected URL."""
-            def __init__(self, parent: tk.Widget):
+            def __init__(self, parent: ul.w_i.WidgetInherit):
                 super().__init__(parent, **ul.df.FRAME)
                 ul.g_u.place_on_grid(self, coords=(0, 2))
                 ul.g_u.set_weights(self, x=(4, 1))
@@ -119,7 +120,7 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
 
             class StreamSelect(tk.Frame, ul.w_i.WidgetInherit):
                 """UI for selecting the stream."""
-                def __init__(self, parent: tk.Widget):
+                def __init__(self, parent: ul.w_i.WidgetInherit):
                     super().__init__(parent, **ul.df.FRAME)
                     ul.g_u.place_on_grid(self, coords=(0, 1))
                     ul.g_u.set_weights(self, y=(1, 3))
@@ -129,21 +130,21 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
 
                 class Title(tk.Label, ul.w_i.WidgetInherit):
                     """The title."""
-                    def __init__(self, parent: tk.Widget):
+                    def __init__(self, parent: ul.w_i.WidgetInherit):
                         super().__init__(parent, text="Select Stream")
                         ul.g_u.place_on_grid(self)
                         ul.f_u.set_font(self, size_mult=2, bold=True)
 
                 class Listbox(tk.Listbox, ul.w_i.WidgetInherit):
                     """The list of streams."""
-                    def __init__(self, parent: tk.Widget):
+                    def __init__(self, parent: ul.w_i.WidgetInherit):
                         super().__init__(parent, exportselection=False)
                         ul.g_u.place_on_grid(self, coords=(0, 1))
                         ul.f_u.set_font(self)
 
             class Convert(tk.Frame, ul.w_i.WidgetInherit):
                 """UI for converting the stream into a format."""
-                def __init__(self, parent: tk.Widget):
+                def __init__(self, parent: ul.w_i.WidgetInherit):
                     super().__init__(parent, **ul.df.FRAME)
                     ul.g_u.place_on_grid(self, coords=(1, 1))
                     ul.g_u.set_weights(self, x=(1, 1))
@@ -153,14 +154,14 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
 
                 class Title(tk.Label, ul.w_i.WidgetInherit):
                     """The title."""
-                    def __init__(self, parent: tk.Widget):
+                    def __init__(self, parent: ul.w_i.WidgetInherit):
                         super().__init__(parent, text="Convert to:")
                         ul.g_u.place_on_grid(self)
                         ul.f_u.set_font(self, bold=True)
 
                 class List(tk.Listbox, ul.w_i.WidgetInherit):
                     """List of formats to convert to."""
-                    def __init__(self, parent: tk.Widget):
+                    def __init__(self, parent: ul.w_i.WidgetInherit):
                         super().__init__(parent, exportselection=False)
                         ul.g_u.place_on_grid(self, coords=(1, 0))
                         ul.f_u.set_font(self)
@@ -169,7 +170,7 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
 
         class Path(tk.Frame, ul.w_i.WidgetInherit):
             """UI to get the file path."""
-            def __init__(self, parent: tk.Widget):
+            def __init__(self, parent: ul.w_i.WidgetInherit):
                 super().__init__(parent, **ul.df.FRAME)
                 ul.g_u.place_on_grid(self, coords=(0, 3), ipad_set=(5, 0))
                 ul.g_u.set_weights(self, x=(1, 3, 1))
@@ -180,14 +181,14 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
 
             class Title(tk.Label, ul.w_i.WidgetInherit):
                 """The title."""
-                def __init__(self, parent: tk.Widget):
+                def __init__(self, parent: ul.w_i.WidgetInherit):
                     super().__init__(parent, text="Output to:")
                     ul.g_u.place_on_grid(self)
                     ul.f_u.set_font(self, size_mult=2, bold=True)
 
             class Input(tk.Entry, ul.w_i.WidgetInherit):
                 """The input field."""
-                def __init__(self, parent: tk.Widget):
+                def __init__(self, parent: ul.w_i.WidgetInherit):
                     self.variable = tk.StringVar()
                     super().__init__(parent, textvariable=self.variable)
                     ul.g_u.place_on_grid(self, coords=(1, 0))
@@ -195,14 +196,14 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
 
             class Browse(tk.Button, ul.w_i.WidgetInherit):
                 """A button that browses the user's directory."""
-                def __init__(self, parent: tk.Widget):
+                def __init__(self, parent: ul.w_i.WidgetInherit):
                     super().__init__(parent, text="Browse...")
                     ul.g_u.place_on_grid(self, coords=(2, 0))
                     ul.f_u.set_font(self)
 
         class SaveControl(tk.Frame, ul.w_i.WidgetInherit):
             """Contains buttons for confirming the data inputted."""
-            def __init__(self, parent: tk.Widget):
+            def __init__(self, parent: ul.w_i.WidgetInherit):
                 super().__init__(parent, **ul.df.FRAME)
                 ul.g_u.place_on_grid(self, coords=(0, 4))
                 ul.g_u.set_weights(self, x=(1, 1))
@@ -212,14 +213,14 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
 
             class Confirm(tk.Button, ul.w_i.WidgetInherit):
                 """A button that confirms the data inputted."""
-                def __init__(self, parent: tk.Widget):
+                def __init__(self, parent: ul.w_i.WidgetInherit):
                     super().__init__(parent, text="Confirm")
                     ul.g_u.place_on_grid(self)
                     ul.f_u.set_font(self)
 
             class Cancel(tk.Button, ul.w_i.WidgetInherit):
                 """A button that cancels the data inputted."""
-                def __init__(self, parent: tk.Widget):
+                def __init__(self, parent: ul.w_i.WidgetInherit):
                     super().__init__(parent, text="Cancel")
                     ul.g_u.place_on_grid(self, coords=(1, 0))
                     ul.f_u.set_font(self)

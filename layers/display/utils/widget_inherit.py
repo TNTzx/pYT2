@@ -12,17 +12,36 @@ def func_caller(*funcs):
     return wrap
 
 
-class WidgetInherit(tk.Widget):
+class WidgetInherit(ul.w_i.WidgetInherit):
     """Class for widget classes to inherit to."""
     def __init_subclass__(cls) -> None:
-        def end_init(self: tk.Widget, *args, **kwargs):
+        def end_init(self: ul.w_i.WidgetInherit, *args, **kwargs):
             pass
 
         cls.__init__ = func_caller(cls.__init__, end_init)
 
-    def enable(self, state: bool = True):
-        """Enables or disables the widget."""
+    def visible(self, state: bool = True):
+        """Makes a widget visible or not."""
         if state:
             self.grid()
         else:
-            self.grid_forget()
+            self.grid_remove()
+
+    def enable(self, state: bool = True):
+        """Enables or disables the widget and its children."""
+        configure = {
+            "state": tk.NORMAL if state else tk.DISABLED
+        }
+
+        def edit_state(widget: ul.w_i.WidgetInherit):
+            children = widget.winfo_children()
+            if len(children) > 0:
+                for child in children:
+                    edit_state(child)
+            else:
+                if issubclass(widget.__class__, tk.Scrollbar):
+                    pass
+                else:
+                    widget.configure(**configure)
+
+        edit_state(self)

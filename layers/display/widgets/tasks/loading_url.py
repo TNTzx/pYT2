@@ -20,7 +20,7 @@ class Loading(tk.Toplevel, ul.w_i.WidgetInherit):
 
     class MainFrame(tk.Frame, ul.w_i.WidgetInherit):
         """Frame."""
-        def __init__(self, parent: tk.Widget):
+        def __init__(self, parent: ul.w_i.WidgetInherit):
             super().__init__(parent, **ul.df.FRAME)
             ul.g_u.place_on_grid(self)
             ul.g_u.set_weights(self, y=(1, 1))
@@ -30,14 +30,14 @@ class Loading(tk.Toplevel, ul.w_i.WidgetInherit):
 
         class Title(tk.Label, ul.w_i.WidgetInherit):
             """Title."""
-            def __init__(self, parent: tk.Widget):
+            def __init__(self, parent: ul.w_i.WidgetInherit):
                 super().__init__(parent, text="Loading URL...")
                 ul.g_u.place_on_grid(self)
                 ul.f_u.set_font(self, size_mult=2, bold=True)
 
         class LoadingBar(ttk.Progressbar, ul.w_i.WidgetInherit):
             """The loading bar."""
-            def __init__(self, parent: tk.Widget):
+            def __init__(self, parent: ul.w_i.WidgetInherit):
                 super().__init__(parent, mode="indeterminate")
                 ul.g_u.place_on_grid(self, (0, 1))
 

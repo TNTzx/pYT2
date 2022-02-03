@@ -8,7 +8,7 @@ import layers.display.widgets.tasks.edit as ed
 
 class MainFrame(tk.Frame, ul.w_i.WidgetInherit):
     """Main frame for the tasks menu."""
-    def __init__(self, parent: tk.Widget):
+    def __init__(self, parent: ul.w_i.WidgetInherit):
         super().__init__(parent, **ul.df.FRAME)
         ul.g_u.place_on_grid(self, coords=(0, 1))
         ul.g_u.set_weights(self)
@@ -19,14 +19,14 @@ class MainFrame(tk.Frame, ul.w_i.WidgetInherit):
 
     class Title(tk.Label, ul.w_i.WidgetInherit):
         """Title."""
-        def __init__(self, parent: tk.Widget):
+        def __init__(self, parent: ul.w_i.WidgetInherit):
             super().__init__(parent, text="TASKS")
             ul.g_u.place_on_grid(self)
             ul.f_u.set_font(self, size_mult=2, bold=True)
 
     class TaskControl(tk.Frame, ul.w_i.WidgetInherit):
         """Main frame for the tasks menu."""
-        def __init__(self, parent: tk.Widget):
+        def __init__(self, parent: ul.w_i.WidgetInherit):
             super().__init__(parent, **ul.df.FRAME)
             ul.g_u.place_on_grid(self, coords=(0, 1))
             ul.g_u.set_weights(self)
@@ -37,7 +37,7 @@ class MainFrame(tk.Frame, ul.w_i.WidgetInherit):
 
         class List(tk.Frame):
             """Task list and scrollbar."""
-            def __init__(self, parent: tk.Widget):
+            def __init__(self, parent: ul.w_i.WidgetInherit):
                 super().__init__(parent, **ul.df.FRAME)
                 ul.g_u.place_on_grid(self)
                 ul.g_u.set_weights(self)
@@ -56,27 +56,27 @@ class MainFrame(tk.Frame, ul.w_i.WidgetInherit):
 
             class List(tk.Listbox, ul.w_i.WidgetInherit):
                 """List of tasks."""
-                def __init__(self, parent: tk.Widget):
+                def __init__(self, parent: ul.w_i.WidgetInherit):
                     super().__init__(parent, selectmode=tk.MULTIPLE, exportselection=False)
                     ul.g_u.place_on_grid(self)
                     ul.f_u.set_font(self)
 
             class XScroll(tk.Scrollbar, ul.w_i.WidgetInherit):
                 """Horizontal Scrollbar."""
-                def __init__(self, parent: tk.Widget):
+                def __init__(self, parent: ul.w_i.WidgetInherit):
                     super().__init__(parent, orient=tk.HORIZONTAL)
                     ul.g_u.place_on_grid(self, coords=(0, 1))
 
             class YScroll(tk.Scrollbar, ul.w_i.WidgetInherit):
                 """Vertical Scrollbar."""
-                def __init__(self, parent: tk.Widget):
+                def __init__(self, parent: ul.w_i.WidgetInherit):
                     super().__init__(parent)
                     ul.g_u.place_on_grid(self, coords=(1, 0))
 
 
         class Controls(tk.Frame, ul.w_i.WidgetInherit):
             """Controls for the lists."""
-            def __init__(self, parent: tk.Widget):
+            def __init__(self, parent: ul.w_i.WidgetInherit):
                 super().__init__(parent, **ul.df.FRAME)
                 ul.g_u.place_on_grid(self, coords=(1, 0))
                 ul.g_u.set_weights(self, y=(1, 1, 1))
@@ -87,24 +87,24 @@ class MainFrame(tk.Frame, ul.w_i.WidgetInherit):
 
             class TaskButton(tk.Button, ul.w_i.WidgetInherit):
                 """Base button class."""
-                def __init__(self, parent: tk.Widget, text: str, underline=False, coords=(0, 0)):
+                def __init__(self, parent: ul.w_i.WidgetInherit, text: str, underline=False, coords=(0, 0)):
                     super().__init__(parent, text=text)
                     ul.g_u.place_on_grid(self, coords=coords)
                     ul.f_u.set_font(self, underline=underline)
 
             class AddTask(TaskButton):
                 """Add a task."""
-                def __init__(self, parent: tk.Widget):
+                def __init__(self, parent: ul.w_i.WidgetInherit):
                     super().__init__(parent, text="Add Task", underline=True)
 
 
             class EditTask(TaskButton):
                 """Add a task."""
-                def __init__(self, parent: tk.Widget):
+                def __init__(self, parent: ul.w_i.WidgetInherit):
                     super().__init__(parent, text="Edit Task", coords=(0, 1))
 
 
             class RemoveTask(TaskButton):
                 """Add a task."""
-                def __init__(self, parent: tk.Widget):
+                def __init__(self, parent: ul.w_i.WidgetInherit):
                     super().__init__(parent, text="Remove Task", coords=(0, 2))

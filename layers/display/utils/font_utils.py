@@ -7,7 +7,7 @@ import layers.display.utils as ul
 
 
 def set_font(
-        widget: tk.Widget, family=ul.df.FONT_FAMILY,
+        widget: ul.w_i.WidgetInherit, family=ul.df.FONT_FAMILY,
         size_mult=1, bold=False, italic=False, underline=False, overline=False
     ):
     """Sets the font of a widget."""

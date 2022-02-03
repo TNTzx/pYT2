@@ -5,7 +5,7 @@ import tkinter as tk
 import layers.display.utils as ul
 
 
-def place_on_grid(widget: tk.Widget,
+def place_on_grid(widget: ul.w_i.WidgetInherit,
         coords = (0, 0),
         span_set = (1, 1),
         ipad_set = (0, 0),
@@ -25,7 +25,7 @@ def place_on_grid(widget: tk.Widget,
         sticky = "".join(sticks)
     )
 
-def set_weights(widget: tk.Widget, x=(1,), y=(1,)):
+def set_weights(widget: ul.w_i.WidgetInherit, x=(1,), y=(1,)):
     """Sets the weights for a widget, usually a Frame or a LabelFrame goes here."""
     for idx, weight in enumerate(x):
         widget.columnconfigure(idx, weight=weight)

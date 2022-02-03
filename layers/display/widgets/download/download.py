@@ -24,7 +24,7 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
 
     class MainFrame(tk.Frame, ul.w_i.WidgetInherit):
         """Main frame."""
-        def __init__(self, parent: tk.Widget):
+        def __init__(self, parent: ul.w_i.WidgetInherit):
             super().__init__(parent, **ul.df.FRAME)
             ul.g_u.place_on_grid(self)
             ul.g_u.set_weights(self, y=(1, 1))
@@ -34,14 +34,14 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
 
         class Title(tk.Label, ul.w_i.WidgetInherit):
             """Title."""
-            def __init__(self, parent: tk.Widget):
+            def __init__(self, parent: ul.w_i.WidgetInherit):
                 super().__init__(parent, text="Downloading...")
                 ul.g_u.place_on_grid(self)
                 ul.f_u.set_font(self, size_mult=2, bold=True)
 
         class Progressbars(tk.Frame, ul.w_i.WidgetInherit):
             """Progressbars."""
-            def __init__(self, parent: tk.Widget):
+            def __init__(self, parent: ul.w_i.WidgetInherit):
                 super().__init__(parent, **ul.df.FRAME)
                 ul.g_u.place_on_grid(self, coords=(0, 1))
                 ul.g_u.set_weights(self, y=(1, 1))
@@ -51,7 +51,7 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
 
             class TotalTasksProgress(tk.Frame, ul.w_i.WidgetInherit):
                 """Contains widgets for the total tasks finished."""
-                def __init__(self, parent: tk.Widget):
+                def __init__(self, parent: ul.w_i.WidgetInherit):
                     super().__init__(parent, **ul.df.FRAME)
                     ul.g_u.place_on_grid(self)
                     ul.g_u.set_weights(self, y=(1, 1))
@@ -61,7 +61,7 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
 
                 class Label(tk.Label, ul.w_i.WidgetInherit):
                     """Label text."""
-                    def __init__(self, parent: tk.Widget):
+                    def __init__(self, parent: ul.w_i.WidgetInherit):
                         self.variable = tk.StringVar()
                         super().__init__(parent, textvariable=self.variable)
                         ul.g_u.place_on_grid(self)
@@ -69,14 +69,14 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
 
                 class Progressbar(ttk.Progressbar, ul.w_i.WidgetInherit):
                     """The progressbar."""
-                    def __init__(self, parent: tk.Widget):
+                    def __init__(self, parent: ul.w_i.WidgetInherit):
                         self.variable = tk.DoubleVar()
                         super().__init__(parent, maximum=100, variable=self.variable)
                         ul.g_u.place_on_grid(self, coords=(0, 1))
 
             class TaskProgress(tk.Frame, ul.w_i.WidgetInherit):
                 """Total progress for one task."""
-                def __init__(self, parent: tk.Widget):
+                def __init__(self, parent: ul.w_i.WidgetInherit):
                     super().__init__(parent, **ul.df.FRAME)
                     ul.g_u.place_on_grid(self, coords=(0, 1))
                     ul.g_u.set_weights(self, y=(1, 1))
@@ -86,7 +86,7 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
 
                 class Label(tk.Label, ul.w_i.WidgetInherit):
                     """Label text."""
-                    def __init__(self, parent: tk.Widget):
+                    def __init__(self, parent: ul.w_i.WidgetInherit):
                         self.variable = tk.StringVar()
                         super().__init__(parent, textvariable=self.variable)
                         ul.g_u.place_on_grid(self)
@@ -94,7 +94,7 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
 
                 class Progressbar(ttk.Progressbar, ul.w_i.WidgetInherit):
                     """The progressbar."""
-                    def __init__(self, parent: tk.Widget):
+                    def __init__(self, parent: ul.w_i.WidgetInherit):
                         self.variable = tk.DoubleVar()
                         super().__init__(parent, maximum=100, variable=self.variable)
                         ul.g_u.place_on_grid(self, coords=(0, 1))

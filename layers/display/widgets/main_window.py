@@ -40,7 +40,7 @@ class MainWindow(tk.Tk):
 
     class FrameMain(tk.Frame, ul.w_i.WidgetInherit):
         """Main frame."""
-        def __init__(self, parent: tk.Widget):
+        def __init__(self, parent: ul.w_i.WidgetInherit):
             super().__init__(parent, **ul.df.FRAME)
             ul.g_u.place_on_grid(self)
             ul.g_u.set_weights(self, y=(1, 3, 1))
@@ -51,7 +51,7 @@ class MainWindow(tk.Tk):
 
         class TitleFrame(tk.Frame, ul.w_i.WidgetInherit):
             """Main frame for the title."""
-            def __init__(self, parent: tk.Widget):
+            def __init__(self, parent: ul.w_i.WidgetInherit):
                 super().__init__(parent, **ul.df.FRAME)
                 ul.g_u.place_on_grid(self)
                 ul.g_u.set_weights(self)
@@ -60,14 +60,14 @@ class MainWindow(tk.Tk):
 
             class Title(tk.Label, ul.w_i.WidgetInherit):
                 """Title label."""
-                def __init__(self, parent: tk.Widget):
+                def __init__(self, parent: ul.w_i.WidgetInherit):
                     super().__init__(parent, text="YOUTUBE DOWNLOADER")
                     ul.g_u.place_on_grid(self)
                     ul.f_u.set_font(self, size_mult=3, bold=True)
 
         class DownloadFrame(tk.Frame, ul.w_i.WidgetInherit):
             """Main frame for the title."""
-            def __init__(self, parent: tk.Widget):
+            def __init__(self, parent: ul.w_i.WidgetInherit):
                 super().__init__(parent, **ul.df.FRAME)
                 ul.g_u.place_on_grid(self, coords=(0, 2))
                 ul.g_u.set_weights(self, x=(1, 4))
@@ -77,14 +77,14 @@ class MainWindow(tk.Tk):
 
             class Title(tk.Label, ul.w_i.WidgetInherit):
                 """Title label."""
-                def __init__(self, parent: tk.Widget):
+                def __init__(self, parent: ul.w_i.WidgetInherit):
                     super().__init__(parent, text="Download:")
                     ul.g_u.place_on_grid(self)
                     ul.f_u.set_font(self, size_mult=2, bold=True)
 
             class Download(tk.Button, ul.w_i.WidgetInherit):
                 """Download button."""
-                def __init__(self, parent: tk.Widget):
+                def __init__(self, parent: ul.w_i.WidgetInherit):
                     super().__init__(parent, text="Download!")
                     ul.g_u.place_on_grid(self, coords=(1, 0))
                     ul.f_u.set_font(self, underline=True)

@@ -9,7 +9,7 @@ import layers.display.utils as ul
 
 class Messagebox(tk.Toplevel, ul.w_i.WidgetInherit):
     """Represents a message box."""
-    def __init__(self, parent: tk.Widget, title: str, description: str):
+    def __init__(self, parent: ul.w_i.WidgetInherit, title: str, description: str):
         super().__init__(parent)
         self.title(title)
         self.focus_set()
@@ -25,21 +25,21 @@ class Messagebox(tk.Toplevel, ul.w_i.WidgetInherit):
 
     class Description(tk.Label, ul.w_i.WidgetInherit):
         """The description."""
-        def __init__(self, parent: tk.Widget, description: str):
+        def __init__(self, parent: ul.w_i.WidgetInherit, description: str):
             super().__init__(parent, text=description)
             ul.g_u.place_on_grid(self)
             ul.f_u.set_font(self, bold=True)
 
     class ButtonFrame(tk.Frame, ul.w_i.WidgetInherit):
         """Frame for buttons."""
-        def __init__(self, parent: tk.Widget):
+        def __init__(self, parent: ul.w_i.WidgetInherit):
             super().__init__(parent,**ul.df.FRAME)
             ul.g_u.place_on_grid(self, coords=(0, 1))
 
 
     class Button(tk.Button, ul.w_i.WidgetInherit):
         """Button."""
-        def __init__(self, parent: tk.Widget, text: str, command: typ.Callable = None):
+        def __init__(self, parent: ul.w_i.WidgetInherit, text: str, command: typ.Callable = None):
             super().__init__(parent, text=text, command=command)
             ul.f_u.set_font(self)
             self.text = text
@@ -79,7 +79,7 @@ class Options():
     cancel = "Cancel"
 
 
-def messagebox(parent: tk.Widget, title: str, description: str, options: tuple[str] = ()):
+def messagebox(parent: ul.w_i.WidgetInherit, title: str, description: str, options: tuple[str] = ()):
     """Shows a messagebox then returns the option."""
     msgbox = Messagebox(parent, title, description)
     for option in options:
