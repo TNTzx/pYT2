@@ -16,7 +16,7 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
     """The main window."""
     def __init__(self):
         super().__init__()
-        ul.w_u.set_size(self, ul.w_u.Dimension(600, 300))
+        ul.w_u.set_size(self, ul.w_u.Dimension(800, 300))
         ul.w_u.center_window(self)
         ul.g_u.set_weights(self)
 
@@ -107,16 +107,16 @@ def download(tasks: list[tsk.Task]):
     total_tasks = len(tasks)
 
 
-    def update_tasks_progress(task: tsk.Task, task_idx: int, total_tasks: int):
+    def update_mult_tasks_progress(task: tsk.Task, task_idx: int, total_tasks: int):
         task_no = task_idx + 1
         w_progressbars.w_total_tasks.w_label.variable.set((
             f"Tasks Download Progress: \n"
-            f"Downloading task {task_no} of {total_tasks}\n"
+            f"Downloading task {task_no} of {total_tasks} "
             f"( {round((task_no - 1 / total_tasks) * 100, 2)}% )\n"
             f"{task.__repr__()}"
         ))
 
-    def update_task_progress(stream: yt.Stream, chunk: bytes, bytes_remaining: int):
+    def update_task_progress_yt(stream: yt.Stream, chunk: bytes, bytes_remaining: int):
         total_bytes = stream.filesize
         bytes_downloaded = total_bytes - bytes_remaining
         bytes_downloaded_display = f"{o_f.bytes_to_mb(bytes_downloaded)} / {o_f.bytes_to_mb(total_bytes)}"
@@ -129,10 +129,13 @@ def download(tasks: list[tsk.Task]):
         ))
         w_task.w_progress.variable.set(percent)
 
+    def update_task_progress_conv():
+        pass
+
 
     for idx, task in enumerate(tasks):
-        update_tasks_progress(task, idx, total_tasks)
-        task.callbacks.youtube.on_progress = update_task_progress
+        update_mult_tasks_progress(task, idx, total_tasks)
+        task.callbacks.youtube.on_progress = task.callbacks.youtube.on_complete = update_task_progress_yt
 
         def download_task(task: tsk.Task = task):
             task.download()

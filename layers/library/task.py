@@ -77,7 +77,7 @@ class Task():
         selected_stream.download(temp_path[0], temp_path[1])
 
         if selected_stream.type == "video":
-            clip = mpy.VideoFileClip(os.path.join(temp_path))
+            clip = mpy.VideoFileClip(os.path.join(*temp_path))
         elif selected_stream.type == "audio":
             clip = mpy.AudioFileClip(temp_path)
 
@@ -86,6 +86,7 @@ class Task():
         self.callbacks.converting.on_complete()
 
         clip.close()
+        os.remove(temp_path)
 
 
 DEFAULT_TASK = Task(
@@ -93,6 +94,6 @@ DEFAULT_TASK = Task(
     yt_o.StreamInfo(
         yt_o.DEFAULT_YT_OBJ.streams.filter(progressive=True).get_highest_resolution(), 0
     ),
-    c_f.ConvertFormat("mp3", c_f.ConvertFormat.Types.audio),
+    c_f.convert_formats[1],
     r"E:/[9] dump/a.mp3"
 )

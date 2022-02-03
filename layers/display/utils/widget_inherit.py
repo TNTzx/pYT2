@@ -12,10 +12,17 @@ def func_caller(*funcs):
     return wrap
 
 
-class WidgetInherit():
+class WidgetInherit(tk.Widget):
     """Class for widget classes to inherit to."""
     def __init_subclass__(cls) -> None:
         def end_init(self: tk.Widget, *args, **kwargs):
             pass
 
         cls.__init__ = func_caller(cls.__init__, end_init)
+
+    def enable(self, state: bool = True):
+        """Enables or disables the widget."""
+        if state:
+            self.grid()
+        else:
+            self.grid_forget()
