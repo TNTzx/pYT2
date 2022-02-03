@@ -2,9 +2,9 @@
 
 
 import os
-import typing as typ
 import moviepy.editor as mpy
 import proglog as plg
+import shutil as shut
 
 import layers.library.other_functions as o_f
 
@@ -27,15 +27,20 @@ class ConvertFormat():
         video = "Video"
         audio = "Audio"
 
-    def convert(self, clip: mpy.VideoFileClip | mpy.AudioFileClip, output_path: str, original_format: str = None, logger: plg.ProgressBarLogger = None):
+    def convert(self, original_type: str, original_path: str, original_ext: str, new_path: str, logger: plg.ProgressBarLogger = None):
         """Convert"""
-        if original_format is not None:
-            if original_format == self.file_ext:
-                return
+        if original_ext == self.file_ext:
+            shut.copy2(original_path, new_path)
+            return
 
-        output_path_tup = os.path.split(output_path)
+        output_path_tup = os.path.split(new_path)
         filename_tup = os.path.splitext(output_path_tup[1])
         new_path = os.path.join(output_path_tup[0], f"{filename_tup[0]}.{self.file_ext}")
+
+        if original_type == ConvertFormat.Types.video:
+            clip = mpy.VideoFileClip(original_path)
+        elif original_type == ConvertFormat.Types.audio:
+            clip = mpy.AudioFileClip(original_path)
 
         if isinstance(clip, mpy.VideoFileClip):
             if self.type == ConvertFormat.Types.video:
@@ -46,7 +51,11 @@ class ConvertFormat():
             if self.type == ConvertFormat.Types.audio:
                 clip.write_audiofile(new_path, logger=logger)
             else:
+                clip.close()
                 raise ConvertError("Cannot convert audio to video.")
+
+        clip.close()
+
 
 convert_formats = [
     ConvertFormat("mp4", ConvertFormat.Types.video),

@@ -64,6 +64,12 @@ class Task():
     def update_selected_stream(self):
         """Updates the selected stream based on self.yt_obj and self.selected_stream."""
         self.selected_stream.stream = self.streams_list[self.selected_stream.idx_from_all_streams]
+    
+    def update_output_path(self):
+        """Updates the output path from the selected stream's subtype."""
+        path_tup = os.path.split(self.output_path)
+        filename_tup = os.path.splitext(path_tup[1])
+        self.output_path = os.path.join(path_tup[0], f"{filename_tup[0]}.{self.selected_stream.stream.subtype}")
 
 
     def download(self):
@@ -80,11 +86,6 @@ class Task():
         self.callbacks.youtube.on_start(selected_stream, 0, selected_stream.filesize)
         selected_stream.download(temp_path[0], temp_path[1])
 
-        if selected_stream.type == "video":
-            clip = mpy.VideoFileClip(os.path.join(*temp_path))
-        elif selected_stream.type == "audio":
-            clip = mpy.AudioFileClip(temp_path)
-
         self.callbacks.converting.on_start()
 
         self_me = self
@@ -94,10 +95,19 @@ class Task():
             def bars_callback(self, bar, attr, value, old_value=None):
                 self_me.callbacks.converting.on_progress(value, self.bars[bar]['total'])
 
-        self.selected_convert_form.convert(clip, self.output_path, original_format=selected_stream.subtype, logger=ConvertProgressLogger())
-        self.callbacks.converting.on_complete()
+        if selected_stream.type == "video":
+            original_type = c_f.ConvertFormat.Types.video
+        elif selected_stream.type == "audio":
+            original_type = c_f.ConvertFormat.Types.audio
 
-        clip.close()
+        self.selected_convert_form.convert(
+            original_type,
+            os.path.join(*temp_path),
+            selected_stream.subtype,
+            self.output_path,
+            logger = ConvertProgressLogger()
+        )
+        self.callbacks.converting.on_complete()
         os.remove(os.path.join(*temp_path))
 
 

@@ -287,6 +287,7 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
             self.task.selected_stream = self.get_selected_stream()
             self.task.selected_convert_form = self.get_selected_format()
             self.task.output_path = self.w_frame.w_path.w_input.variable.get()
+            self.task.update_output_path()
 
             self.destroy()
 
