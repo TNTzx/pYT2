@@ -1,6 +1,7 @@
 """Download widgets."""
 
 
+import threading as thr
 import tkinter as tk
 import tkinter.ttk as ttk
 import pytube as yt
@@ -8,6 +9,7 @@ import pytube as yt
 import layers.display.utils as ul
 
 import layers.library.task as tsk
+import layers.library.other_functions as o_f
 
 
 class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
@@ -68,7 +70,8 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
                 class Progressbar(ttk.Progressbar, ul.w_i.WidgetInherit):
                     """The progressbar."""
                     def __init__(self, parent: tk.Widget):
-                        super().__init__(parent)
+                        self.variable = tk.DoubleVar()
+                        super().__init__(parent, maximum=100, variable=self.variable)
                         ul.g_u.place_on_grid(self, coords=(0, 1))
 
             class TaskProgress(tk.Frame, ul.w_i.WidgetInherit):
@@ -92,7 +95,8 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
                 class Progressbar(ttk.Progressbar, ul.w_i.WidgetInherit):
                     """The progressbar."""
                     def __init__(self, parent: tk.Widget):
-                        super().__init__(parent)
+                        self.variable = tk.DoubleVar()
+                        super().__init__(parent, maximum=100, variable=self.variable)
                         ul.g_u.place_on_grid(self, coords=(0, 1))
 
 
@@ -102,19 +106,9 @@ def download(tasks: list[tsk.Task]):
     w_progressbars = window.w_frame.w_progressbars
     total_tasks = len(tasks)
 
-    def on_progress_callback(stream: yt.Stream, chunk: bytes, bytes_remaining: int):
-        total_bytes = stream.filesize
-        bytes_downloaded = total_bytes - bytes_remaining
-        percent = round((bytes_downloaded / total_bytes) * 100, 2)
 
-        w_task = window.w_frame.w_progressbars.w_task
-        w_task.w_label.variable.set((
-            "Task Download Progress:\n"
-            f"{bytes_downloaded} / {total_bytes} ( {percent} )"
-        ))
-
-    for idx, task in enumerate(tasks):
-        task_no = idx + 1
+    def update_tasks_progress(task: tsk.Task, task_idx: int, total_tasks: int):
+        task_no = task_idx + 1
         w_progressbars.w_total_tasks.w_label.variable.set((
             f"Tasks Download Progress: \n"
             f"Downloading task {task_no} of {total_tasks}\n"
@@ -122,4 +116,25 @@ def download(tasks: list[tsk.Task]):
             f"{task.__repr__()}"
         ))
 
-        task.download(on_progress_callback=on_progress_callback)
+    def update_task_progress(stream: yt.Stream, chunk: bytes, bytes_remaining: int):
+        total_bytes = stream.filesize
+        bytes_downloaded = total_bytes - bytes_remaining
+        bytes_downloaded_display = f"{o_f.bytes_to_mb(bytes_downloaded)} / {o_f.bytes_to_mb(total_bytes)}"
+        percent = round((bytes_downloaded / total_bytes) * 100, 2)
+
+        w_task = window.w_frame.w_progressbars.w_task
+        w_task.w_label.variable.set((
+            "Task Download Progress:\n"
+            f"{bytes_downloaded_display} ( {percent} )"
+        ))
+        w_task.w_progress.variable.set(percent)
+
+
+    for idx, task in enumerate(tasks):
+        update_tasks_progress(task, idx, total_tasks)
+        task.callbacks.youtube.on_progress = update_task_progress
+
+        def download_task(task: tsk.Task = task):
+            task.download()
+
+        thr.Thread(target=download_task).start()

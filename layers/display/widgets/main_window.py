@@ -133,4 +133,4 @@ class MainWindow(tk.Tk):
         )
 
         if will_download == msgbox.Options.yes:
-            dl.MainWindow()
+            dl.download(self.tasks)

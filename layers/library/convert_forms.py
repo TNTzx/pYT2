@@ -1,6 +1,10 @@
 """Contains convert formats."""
 
 
+import os
+import typing as typ
+import moviepy.editor as mpy
+
 import layers.library.other_functions as o_f
 
 
@@ -17,6 +21,17 @@ class ConvertFormat():
         """Types of convert formats."""
         video = "Video"
         audio = "Audio"
+
+    def convert(self, clip: mpy.VideoFileClip | mpy.AudioFileClip, output_path: str):
+        """Convert"""
+        output_path_tup = os.path.split(output_path)
+        filename_tup = os.path.splitext(output_path_tup[1])
+        new_path = os.path.join(output_path_tup[0], filename_tup[0], self.file_ext)
+
+        if self.type == ConvertFormat.Types.video:
+            clip.write_videofile(new_path)
+        if self.type == ConvertFormat.Types.audio:
+            clip.write_audiofile(new_path)
 
 convert_formats = [
     ConvertFormat("mp4", ConvertFormat.Types.video),
