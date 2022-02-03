@@ -122,5 +122,4 @@ def download(tasks: list[tsk.Task]):
             f"{task.__repr__()}"
         ))
 
-        task.selected_stream.stream._monostate.on_progress = on_progress_callback
-        task.selected_stream.stream.download(task.)
+        task.download(on_progress_callback=on_progress_callback)

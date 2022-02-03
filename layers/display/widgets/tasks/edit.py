@@ -242,7 +242,7 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
 
     def update_streams_info_list(self, streams: list[yt.Stream]):
         """Updates stream_info_dict."""
-        self.streams_info_list = [yt_o.StreamInfo(stream) for stream in reversed(streams)]
+        self.streams_info_list = [yt_o.StreamInfo(stream, idx) for idx, stream in enumerate(reversed(streams))]
         ul.l_u.update_listbox(self.w_frame.w_options.w_stream.w_list, self.streams_info_list)
 
 
@@ -277,6 +277,7 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
             (msgbox.Options.submit, msgbox.Options.no)
         )
         if confirm == msgbox.Options.submit:
+            self.task.update_streams_list()
             self.task.selected_stream = self.get_selected_stream()
             self.task.selected_convert_form = self.get_selected_format()
             self.task.output_path = self.w_frame.w_path.w_input.variable.get()

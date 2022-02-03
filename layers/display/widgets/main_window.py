@@ -5,9 +5,13 @@ import tkinter as tk
 
 import layers.display.utils as ul
 import layers.display.utils.widgets.messagebox as msgbox
+
+import layers.library.task as tsk
+
 import layers.display.widgets.tasks.tasks as tsks
 import layers.display.widgets.tasks.edit as tske
-import layers.library.task as tsk
+import layers.display.widgets.download.download as dl
+
 import layers.library.other_functions as o_f
 
 
@@ -24,8 +28,11 @@ class MainWindow(tk.Tk):
         self.w_frame.w_tasks.w_control.w_controls.w_add.configure(command=self.add_task)
         self.w_frame.w_tasks.w_control.w_controls.w_edit.configure(command=self.edit_task)
         self.w_frame.w_tasks.w_control.w_controls.w_remove.configure(command=self.remove_task)
+        self.w_frame.w_download.w_button.configure(command=self.download)
 
         self.tasks: list[tsk.Task] = []
+        self.tasks.append(tsk.DEFAULT_TASK)
+        self.update_listbox()
 
 
         self.mainloop()
@@ -66,7 +73,7 @@ class MainWindow(tk.Tk):
                 ul.g_u.set_weights(self, x=(1, 4))
 
                 self.w_title = self.Title(self)
-                self.w_download = self.Download(self)
+                self.w_button = self.Download(self)
 
             class Title(tk.Label, ul.w_i.WidgetInherit):
                 """Title label."""
@@ -116,3 +123,14 @@ class MainWindow(tk.Tk):
             to_be_deleted_tasks = ul.l_u.get_selected(self.w_frame.w_tasks.w_control.w_list.w_list, self.tasks)
             self.tasks = o_f.subtract_lists(self.tasks, to_be_deleted_tasks)
         self.update_listbox()
+
+    def download(self):
+        """Downloads the current tasks."""
+        will_download = msgbox.messagebox(
+            self, "Download confirmation",
+            f"Are you sure you want to download {len(self.tasks)} {'task' if len(self.tasks) == 1 else 'tasks'}?",
+            (msgbox.Options.yes, msgbox.Options.no)
+        )
+
+        if will_download == msgbox.Options.yes:
+            dl.MainWindow()
