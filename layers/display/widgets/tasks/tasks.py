@@ -11,7 +11,7 @@ class MainFrame(tk.Frame, ul.w_i.WidgetInherit):
     def __init__(self, parent: ul.w_i.WidgetInherit):
         super().__init__(parent, **ul.df.FRAME)
         ul.g_u.place_on_grid(self, coords=(0, 1))
-        ul.g_u.set_weights(self)
+        ul.g_u.set_weights(self, y=(1, 5))
 
         self.w_title = self.Title(self)
         self.w_control = self.TaskControl(self)

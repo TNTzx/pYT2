@@ -158,6 +158,7 @@ def download(parent: ul.w_i.WidgetInherit, tasks: list[tsk.Task]):
 
     for idx, task in enumerate(tasks):
         ul.w_u.set_size(w_window, ul.w_u.Dimension(len(task.__repr__()) * ul.df.FONT_SIZE_BASE, 300))
+        ul.w_u.center_window(w_window)
         multi_progress(task, idx, total_tasks)
         task.callbacks.youtube.on_start = task.callbacks.youtube.on_progress = yt_progress
         task.callbacks.youtube.on_complete = yt_complete
