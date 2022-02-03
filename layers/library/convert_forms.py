@@ -4,6 +4,7 @@
 import os
 import typing as typ
 import moviepy.editor as mpy
+import proglog as plg
 
 import layers.library.other_functions as o_f
 
@@ -26,7 +27,7 @@ class ConvertFormat():
         video = "Video"
         audio = "Audio"
 
-    def convert(self, clip: mpy.VideoFileClip | mpy.AudioFileClip, output_path: str):
+    def convert(self, clip: mpy.VideoFileClip | mpy.AudioFileClip, output_path: str, logger: plg.ProgressBarLogger = None):
         """Convert"""
         output_path_tup = os.path.split(output_path)
         filename_tup = os.path.splitext(output_path_tup[1])
@@ -34,12 +35,12 @@ class ConvertFormat():
 
         if isinstance(clip, mpy.VideoFileClip):
             if self.type == ConvertFormat.Types.video:
-                clip.write_videofile(new_path)
+                clip.write_videofile(new_path, logger=logger)
             if self.type == ConvertFormat.Types.audio:
-                clip.audio.write_audiofile(new_path)
+                clip.audio.write_audiofile(new_path, logger=logger)
         elif isinstance(clip, mpy.AudioFileClip):
             if self.type == ConvertFormat.Types.audio:
-                clip.write_audiofile(new_path)
+                clip.write_audiofile(new_path, logger=logger)
             else:
                 raise ConvertError("Cannot convert audio to video.")
 

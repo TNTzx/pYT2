@@ -15,7 +15,7 @@ import layers.display.widgets.download.download as dl
 import layers.library.other_functions as o_f
 
 
-class MainWindow(tk.Tk):
+class MainWindow(tk.Tk, ul.w_i.WidgetInherit):
     """The main window."""
     def __init__(self):
         super().__init__()

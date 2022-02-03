@@ -9,8 +9,8 @@ import layers.display.utils as ul
 
 class Loading(tk.Toplevel, ul.w_i.WidgetInherit):
     """Loading screen."""
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent: ul.w_i.WidgetInherit):
+        super().__init__(parent)
         ul.g_u.set_weights(self)
         self.geometry("300x100")
         ul.w_u.center_window(self)

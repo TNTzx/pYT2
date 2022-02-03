@@ -33,6 +33,7 @@ def spawn_window(parent: ul.w_i.WidgetInherit, task: tsk.Task | None = None):
         window.task = task
 
     window.wait_window()
+    parent.enable(True)
     return window.task
 
 
@@ -228,13 +229,16 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
 
     def set_url(self):
         """Sets the URL and changes the UI."""
-        w_loading = l_u.Loading()
+        w_loading = l_u.Loading(self)
         def task():
+            self.enable(False)
+            w_loading.enable(True)
             self.task.yt_obj = yt.YouTube(
                 self.w_frame.w_url.w_input.get()
             )
 
             streams: list[yt.Stream] = self.task.yt_obj.streams.filter(progressive=True)
+            self.enable(True)
             self.update_streams_info_list(streams)
 
             w_loading.destroy()

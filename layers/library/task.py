@@ -6,6 +6,7 @@ import tempfile as tmp
 import typing as typ
 import pytube as yt
 import moviepy.editor as mpy
+import proglog as plg
 
 import layers.library.yt_other as yt_o
 import layers.library.convert_forms as c_f
@@ -44,6 +45,7 @@ class Task():
         class YouTube():
             """Youtube callbacks."""
             def __init__(self):
+                self.on_start: typ.Callable = lambda stream, chunk, bytes_remaining: None
                 self.on_progress: typ.Callable = lambda stream, chunk, bytes_remaining: None
                 self.on_complete: typ.Callable = lambda stream, file_path: None
 
@@ -51,6 +53,7 @@ class Task():
             """Converting callbacks."""
             def __init__(self):
                 self.on_start: typ.Callable = lambda: None
+                self.on_progress: typ.Callable = lambda: None
                 self.on_complete: typ.Callable = lambda: None
 
 
@@ -82,7 +85,13 @@ class Task():
             clip = mpy.AudioFileClip(temp_path)
 
         self.callbacks.converting.on_start()
-        self.selected_convert_form.convert(clip, self.output_path)
+
+        class ConvertProgressLogger(plg.ProgressBarLogger):
+            """Convert progress logger."""
+            def bars_callback(self, bar, attr, value, old_value=None):
+                print(f"value = {value}, total = {self.bars[bar]['total']}")
+
+        self.selected_convert_form.convert(clip, self.output_path, logger=ConvertProgressLogger)
         self.callbacks.converting.on_complete()
 
         clip.close()

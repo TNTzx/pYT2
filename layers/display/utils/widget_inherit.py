@@ -1,6 +1,7 @@
 """Module for class for widget classes to inherit to."""
 
 import tkinter as tk
+import tkinter.ttk as ttk
 
 
 def func_caller(*funcs):
@@ -12,10 +13,10 @@ def func_caller(*funcs):
     return wrap
 
 
-class WidgetInherit(ul.w_i.WidgetInherit):
+class WidgetInherit(tk.Widget):
     """Class for widget classes to inherit to."""
     def __init_subclass__(cls) -> None:
-        def end_init(self: ul.w_i.WidgetInherit, *args, **kwargs):
+        def end_init(self: WidgetInherit, *args, **kwargs):
             pass
 
         cls.__init__ = func_caller(cls.__init__, end_init)
@@ -33,15 +34,13 @@ class WidgetInherit(ul.w_i.WidgetInherit):
             "state": tk.NORMAL if state else tk.DISABLED
         }
 
-        def edit_state(widget: ul.w_i.WidgetInherit):
+        def edit_state(widget: WidgetInherit):
             children = widget.winfo_children()
             if len(children) > 0:
                 for child in children:
                     edit_state(child)
             else:
-                if issubclass(widget.__class__, tk.Scrollbar):
-                    pass
-                else:
+                if not issubclass(widget.__class__, (tk.Scrollbar, ttk.Progressbar)):
                     widget.configure(**configure)
 
         edit_state(self)

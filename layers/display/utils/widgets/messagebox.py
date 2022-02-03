@@ -17,6 +17,8 @@ class Messagebox(tk.Toplevel, ul.w_i.WidgetInherit):
         ul.w_u.set_size(self, ul.w_u.Dimension(len(description) * ul.df.FONT_SIZE_BASE, ul.df.FONT_SIZE_BASE * 5 * 2))
         ul.w_u.center_window(self)
 
+        self.w_parent = parent
+
         self.w_description = self.Description(self, description)
         self.w_button_frame = self.ButtonFrame(self)
 
@@ -62,7 +64,10 @@ class Messagebox(tk.Toplevel, ul.w_i.WidgetInherit):
 
         ul.g_u.set_weights(self.w_button_frame, x=[1 for _ in self.buttons])
 
+        self.w_parent.enable(False)
+        self.enable(True)
         self.wait_window()
+        self.w_parent.enable(True)
 
         return self.value
 
