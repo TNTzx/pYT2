@@ -12,6 +12,7 @@ import layers.display.widgets.tasks.loading_url as l_u
 import layers.library.task as tsk
 import layers.library.convert_forms as c_f
 import layers.library.yt_other as yt_o
+import layers.library.other_functions as o_f
 
 
 def spawn_window(parent: ul.w_i.WidgetInherit, task: tsk.Task | None = None):
@@ -262,7 +263,7 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
 
     def browse_for_output_path(self):
         """Opens a file dialog to get a path store the output file."""
-        title = self.task.yt_obj.title
+        title = o_f.slugify(self.task.yt_obj.title, allow_unicode=False)
         default_file_name = f"{title}.{self.get_selected_format().file_ext}"
         file_path = tkfd.asksaveasfilename(
             parent = self,

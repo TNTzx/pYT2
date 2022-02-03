@@ -8,6 +8,7 @@ import tkinter.ttk as ttk
 import pytube as yt
 
 import layers.display.utils as ul
+import layers.display.utils.widgets.messagebox as msgbox
 
 import layers.library.task as tsk
 import layers.library.other_functions as o_f
@@ -101,8 +102,9 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
                         ul.g_u.place_on_grid(self, coords=(0, 1))
 
 
-def download(tasks: list[tsk.Task]):
+def download(parent: ul.w_i.WidgetInherit, tasks: list[tsk.Task]):
     """Downloads a list of tasks."""
+    parent.enable(False)
     w_window = MainWindow()
     w_progressbars = w_window.w_frame.w_progressbars
     total_tasks = len(tasks)
@@ -149,6 +151,15 @@ def download(tasks: list[tsk.Task]):
     def conv_complete():
         w_window.w_frame.w_progressbars.w_task.w_label.variable.set("Task complete converting.")
         time.sleep(1)
+
+        w_window.destroy()
+
+        msgbox.messagebox(
+            parent, "Tasks Complete", "Tasks are complete! :D",
+            (msgbox.Options.ok, )
+        )
+
+        parent.enable(True)
 
 
     for idx, task in enumerate(tasks):
