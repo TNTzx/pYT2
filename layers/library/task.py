@@ -53,7 +53,7 @@ class Task():
             """Converting callbacks."""
             def __init__(self):
                 self.on_start: typ.Callable = lambda: None
-                self.on_progress: typ.Callable = lambda: None
+                self.on_progress: typ.Callable = lambda done, total: None
                 self.on_complete: typ.Callable = lambda: None
 
 
@@ -77,6 +77,7 @@ class Task():
         selected_stream = self.selected_stream.stream
 
         temp_path = (tmp.gettempdir(), f"temp.{selected_stream.subtype}")
+        self.callbacks.youtube.on_start(selected_stream, 0, selected_stream.filesize)
         selected_stream.download(temp_path[0], temp_path[1])
 
         if selected_stream.type == "video":
@@ -86,16 +87,18 @@ class Task():
 
         self.callbacks.converting.on_start()
 
+        self_me = self
+
         class ConvertProgressLogger(plg.ProgressBarLogger):
             """Convert progress logger."""
             def bars_callback(self, bar, attr, value, old_value=None):
-                print(f"value = {value}, total = {self.bars[bar]['total']}")
+                self_me.callbacks.converting.on_progress(value, self.bars[bar]['total'])
 
-        self.selected_convert_form.convert(clip, self.output_path, logger=ConvertProgressLogger)
+        self.selected_convert_form.convert(clip, self.output_path, logger=ConvertProgressLogger())
         self.callbacks.converting.on_complete()
 
         clip.close()
-        os.remove(temp_path)
+        os.remove(os.path.join(*temp_path))
 
 
 DEFAULT_TASK = Task(

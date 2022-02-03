@@ -1,6 +1,7 @@
 """Download widgets."""
 
 
+import time
 import threading as thr
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -102,8 +103,8 @@ class MainWindow(tk.Toplevel, ul.w_i.WidgetInherit):
 
 def download(tasks: list[tsk.Task]):
     """Downloads a list of tasks."""
-    window = MainWindow()
-    w_progressbars = window.w_frame.w_progressbars
+    w_window = MainWindow()
+    w_progressbars = w_window.w_frame.w_progressbars
     total_tasks = len(tasks)
 
 
@@ -116,26 +117,47 @@ def download(tasks: list[tsk.Task]):
             f"{task.__repr__()}"
         ))
 
-    def update_task_progress_yt(stream: yt.Stream, chunk: bytes, bytes_remaining: int):
+    def yt_progress(stream: yt.Stream, chunk: bytes, bytes_remaining: int):
         total_bytes = stream.filesize
         bytes_downloaded = total_bytes - bytes_remaining
-        bytes_downloaded_display = f"{o_f.bytes_to_mb(bytes_downloaded)} / {o_f.bytes_to_mb(total_bytes)}"
-        percent = round((bytes_downloaded / total_bytes) * 100, 2)
+        bytes_downloaded_display = f"{o_f.bytes_to_mb(bytes_downloaded)} MB / {o_f.bytes_to_mb(total_bytes)} MB"
+        percent = o_f.get_percent(bytes_downloaded, total_bytes)
 
-        w_task = window.w_frame.w_progressbars.w_task
+        w_task = w_window.w_frame.w_progressbars.w_task
         w_task.w_label.variable.set((
             "Task Download Progress:\n"
-            f"{bytes_downloaded_display} ( {percent} )"
+            f"{bytes_downloaded_display} ( {percent}% )"
         ))
         w_task.w_progress.variable.set(percent)
 
-    def update_task_progress_conv():
-        pass
+    def yt_complete(stream: yt.Stream, file_path: str):
+        w_window.w_frame.w_progressbars.w_task.w_label.variable.set("Task complete downloading.")
+        time.sleep(1)
+
+
+    def conv_start():
+        w_window.w_frame.w_progressbars.w_task.w_label.variable.set("Task Conversion Starting...")
+
+    def conv_progress(done: int, total: int):
+        percent = o_f.get_percent(done, total)
+        w_window.w_frame.w_progressbars.w_task.w_label.variable.set((
+            "Task Conversion Progress:\n"
+            f"{done} / {total} "
+            f"( {percent}% )"
+        ))
+
+    def conv_complete():
+        w_window.w_frame.w_progressbars.w_task.w_label.variable.set("Task complete converting.")
+        time.sleep(1)
 
 
     for idx, task in enumerate(tasks):
         update_mult_tasks_progress(task, idx, total_tasks)
-        task.callbacks.youtube.on_progress = task.callbacks.youtube.on_complete = update_task_progress_yt
+        task.callbacks.youtube.on_start = task.callbacks.youtube.on_progress = yt_progress
+        task.callbacks.youtube.on_complete = yt_complete
+        task.callbacks.converting.on_start = conv_start
+        task.callbacks.converting.on_progress = conv_progress
+        task.callbacks.converting.on_complete = conv_complete
 
         def download_task(task: tsk.Task = task):
             task.download()
