@@ -27,8 +27,12 @@ class ConvertFormat():
         video = "Video"
         audio = "Audio"
 
-    def convert(self, clip: mpy.VideoFileClip | mpy.AudioFileClip, output_path: str, logger: plg.ProgressBarLogger = None):
+    def convert(self, clip: mpy.VideoFileClip | mpy.AudioFileClip, output_path: str, original_format: str = None, logger: plg.ProgressBarLogger = None):
         """Convert"""
+        if original_format is not None:
+            if original_format == self.file_ext:
+                return
+
         output_path_tup = os.path.split(output_path)
         filename_tup = os.path.splitext(output_path_tup[1])
         new_path = os.path.join(output_path_tup[0], f"{filename_tup[0]}.{self.file_ext}")

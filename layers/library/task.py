@@ -94,7 +94,7 @@ class Task():
             def bars_callback(self, bar, attr, value, old_value=None):
                 self_me.callbacks.converting.on_progress(value, self.bars[bar]['total'])
 
-        self.selected_convert_form.convert(clip, self.output_path, logger=ConvertProgressLogger())
+        self.selected_convert_form.convert(clip, self.output_path, original_format=selected_stream.subtype, logger=ConvertProgressLogger())
         self.callbacks.converting.on_complete()
 
         clip.close()
