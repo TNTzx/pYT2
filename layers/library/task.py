@@ -73,17 +73,19 @@ class Task():
         self.update_selected_stream()
         selected_stream = self.selected_stream.stream
 
-        temp_path = (tmp.gettempdir(), "temp")
+        temp_path = (tmp.gettempdir(), f"temp.{selected_stream.subtype}")
         selected_stream.download(temp_path[0], temp_path[1])
 
         if selected_stream.type == "video":
-            clip = mpy.VideoFileClip(temp_path)
+            clip = mpy.VideoFileClip(os.path.join(temp_path))
         elif selected_stream.type == "audio":
             clip = mpy.AudioFileClip(temp_path)
 
         self.callbacks.converting.on_start()
         self.selected_convert_form.convert(clip, self.output_path)
         self.callbacks.converting.on_complete()
+
+        clip.close()
 
 
 DEFAULT_TASK = Task(
