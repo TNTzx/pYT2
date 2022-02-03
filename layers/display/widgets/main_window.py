@@ -1,6 +1,7 @@
 """Main window."""
 
 
+import threading as thr
 import tkinter as tk
 
 import layers.display.utils as ul
@@ -133,4 +134,7 @@ class MainWindow(tk.Tk, ul.w_i.WidgetInherit):
         )
 
         if will_download == msgbox.Options.yes:
-            dl.download(self, self.tasks)
+            def download_thread():
+                dl.download(self, self.tasks)
+
+            thr.Thread(target=download_thread).start()

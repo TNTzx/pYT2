@@ -2,7 +2,6 @@
 
 
 import time
-import threading as thr
 import tkinter as tk
 import tkinter.ttk as ttk
 import pytube as yt
@@ -138,6 +137,7 @@ def download(parent: ul.w_i.WidgetInherit, tasks: list[tsk.Task]):
 
 
     def conv_start():
+        w_window.w_frame.w_progressbars.w_task.w_progress.variable.set(100)
         w_window.w_frame.w_progressbars.w_task.w_label.variable.set("Task Conversion Starting...")
 
     def conv_progress(done: int, total: int):
@@ -147,19 +147,12 @@ def download(parent: ul.w_i.WidgetInherit, tasks: list[tsk.Task]):
             f"{done} / {total} "
             f"( {percent}% )"
         ))
+        w_window.w_frame.w_progressbars.w_task.w_progress.variable.set(percent)
 
     def conv_complete():
+        w_window.w_frame.w_progressbars.w_task.w_progress.variable.set(100)
         w_window.w_frame.w_progressbars.w_task.w_label.variable.set("Task complete converting.")
         time.sleep(1)
-
-        w_window.destroy()
-
-        msgbox.messagebox(
-            parent, "Tasks Complete", "Tasks are complete! :D",
-            (msgbox.Options.ok, )
-        )
-
-        parent.enable(True)
 
 
     for idx, task in enumerate(tasks):
@@ -170,7 +163,14 @@ def download(parent: ul.w_i.WidgetInherit, tasks: list[tsk.Task]):
         task.callbacks.converting.on_progress = conv_progress
         task.callbacks.converting.on_complete = conv_complete
 
-        def download_task(task: tsk.Task = task):
-            task.download()
+        task.download()
 
-        thr.Thread(target=download_task).start()
+
+    w_window.destroy()
+
+    msgbox.messagebox(
+        parent, "Tasks Complete", "Tasks are complete! :D",
+        (msgbox.Options.ok, )
+    )
+
+    parent.enable(True)
